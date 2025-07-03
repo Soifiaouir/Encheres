@@ -1,0 +1,12 @@
+
+# Ignore tout
+*
+
+# Sauf le dossier src/
+!src/
+!src/**
+
+# Option : on inclut le gitignore lui-même
+!.gitignore
+
+.gradle/

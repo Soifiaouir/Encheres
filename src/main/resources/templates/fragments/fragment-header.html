@@ -1,0 +1,46 @@
+<header xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.w3.org/1999/xhtml"
+        th:fragment="frag-header">
+
+    <nav class="p-5 w-full rounded-b-lg fixed top-0">
+        <div class="grid grid-cols-5 items-center">
+            <div sec:authorize="!isAuthenticated()" class="col-span-5">
+                <div class="w-full flex items-center gap-3 text-sm">
+                    <a href="#"
+                        class="text-neutral-900 mrs-sheppards-regular font-black text-2xl">
+                        ENI <br> Encheres
+                    </a>
+                    <a href="/login"
+                       class="text-neutral-900 me-3 font-semibold ms-auto">
+                        Connexion
+                    </a>
+                    <div class="btn bg-lime-200 text-neutral-900 p-2 pb-1.5 font-semibold rounded-sm flex items-center gap-1">
+                        <a href="/signin">
+                            Inscription
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+            <div sec:authorize="isAuthenticated()" class="col-span-5">
+                <div class="w-full flex items-center gap-3 text-sm">
+                    <div class="btn bg-lime-200 text-neutral-900 p-2 pb-1.5 font-semibold rounded-sm flex items-center gap-1">
+                        <span class="font-bold pt-0.5">100</span>
+                        <img src="/img/money.png" width="25" alt="credit">
+                    </div>
+                    <div class="btn bg-neutral-900 text-neutral-200 p-2 pb-1.5 font-semibold rounded-sm flex items-center gap-1">
+                        <span class="font-bold pt-0.5">Vendre</span>
+                    </div>
+                    <a href="/login"
+                       class="text-neutral-900 me-3 font-semibold me-auto">
+                        Profil
+                    </a>
+                    <a href="/logout"
+                       class="text-neutral-900 font-semibold">
+                        Déconnexion
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:fragment="layout-enchere(titrePage, contenuPage, ressourcesSupp)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1">
+    <title>Title</title>
+    <!-- TAILWIND -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="bg-neutral-900">
+    <!-- Intégration du fragment d'entête -->
+    <div th:replace="~{fragments/fragment-header :: frag-header}"></div>
+
+    <!-- Rendre variable le contenu de la page -->
+    <main th:replace="${contenuPage} ?: ~{}">Contenu de la page
+    </main>
+
+    <!-- Intégration du fragment de pied de page -->
+    <div th:replace="~{fragments/fragment-footer :: frag-footer}"></div>
+
+    <!-- FontAwesome -->
+    <script src="https://kit.fontawesome.com/e3730d51e3.js" crossorigin="anonymous"></script>
+</body>
+</html>

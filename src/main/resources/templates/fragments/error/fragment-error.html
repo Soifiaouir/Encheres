@@ -1,0 +1,7 @@
+<div xmlns:th="http://www.thymeleaf.org"
+     th:fragment="frag-error(inputName)" class="absolute bottom-0 end-0 translate-y-2 pe-5"
+     th:if="${#fields.hasErrors(inputName)}">
+
+    <p class="text-red-400 text-xs px-2 bg-neutral-200 font-semibold"
+       th:text="${#fields.errors(inputName)[0]}"></p>
+</div>

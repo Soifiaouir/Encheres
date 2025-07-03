@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<main>
+    <h2><div data-th-text="${ 'Il y a ' + nmbArticles +' articles disponibles' }"></div></h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Objet</th>
+            <th>Prix Initial</th>
+            <th>Prix en Enchere</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-th-each="item : ${articlesLst}">
+            <td data-th-text="${item.nomArticle}"></td>
+            <td data-th-text="${item.prixInitial}"></td>
+            <td data-th-text="${item.prixVente}"></td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>
