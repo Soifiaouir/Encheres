@@ -1,8 +1,12 @@
 package fr.eni.encheres.ihm;
 
 import fr.eni.encheres.bll.ArticleVenduService;
+import fr.eni.encheres.bll.CategorieService;
+import fr.eni.encheres.bll.UtilisateurService;
 import fr.eni.encheres.bo.ArticleVendu;
+import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Retrait;
+import fr.eni.encheres.bo.Utilisateur;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import jakarta.validation.Valid;
@@ -12,60 +16,109 @@ import org.springframework.web.bind.annotation.*;
 import javax.naming.Binding;
 import java.util.List;
 
-
+@SessionAttributes({"utilisateurEnSession"})
 @Controller
 public class VenteController {
 
     ArticleVenduService articleVenduService;
 
-    public VenteController(ArticleVenduService articleVenduService) {
+    UtilisateurService utilisateurService;
+
+    CategorieService categorieService;
+
+    public VenteController(ArticleVenduService articleVenduService, UtilisateurService utilisateurService, CategorieService categorieService) {
         this.articleVenduService = articleVenduService;
+        this.utilisateurService = utilisateurService;
+        this.categorieService = categorieService;
     }
 
+    // Méthode pour charger les données  de l'utilisateur
+    @ModelAttribute("utilisateurEnSession")
+    public Utilisateur getUtilisateurEnSession() {
+        Utilisateur utilisateur = utilisateurService.findUtilisateurById(1);
+        return utilisateur;
+    }
+
+
+
     @GetMapping("/list_articles")
-    public String pagesListesEncheres(Model model) {
-        List<ArticleVendu> list = articleVenduService.getLstArticleVendus();
+    public String pagesListesArticles(Model model) {
+        List<ArticleVendu> list = articleVenduService.getLstArticleVendusbyUtilisateur(getUtilisateurEnSession());
         model.addAttribute("articlesLst", list);
 
         int articleListSize = list.size();
         model.addAttribute("nmbArticles", articleListSize);
 
         return "view_articles_list";
-    }
-
-    @GetMapping("/fiche_article")
-    public String PageEnchereNonCommencee(@RequestParam(name="noArticle") long noArticle, Model model) {
-        ArticleVendu article = articleVenduService.getArticleVenduByNoArticle(noArticle);
-        model.addAttribute("articleVendu", article);
-
-        String nomArticle = article.getNomArticle();
-
-        model.addAttribute("articleNom", nomArticle);
-
-        return "view_article";
 
     }
 
     @GetMapping("/creer_article")
-    public String PageVendreUnArticle(Model model) {
-        model.addAttribute("articleVendu", new ArticleVendu());
+    public String PageVendreUnArticle( @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, Model model) {
+        ArticleVendu article = new ArticleVendu();
+        model.addAttribute("articleVendu", article);
+
+        List<Categorie> categorieList = categorieService.findAll();
+        model.addAttribute("categorieList", categorieList);
+       // Long noUtilisateur = utilisateurEnSession.getNoUtilisateur();
+       // model.addAttribute("noUtilisateur", noUtilisateur);
 
         return "create_article";
     }
 
     @PostMapping ("/creer_article")
-    public String PageVendreUnArticlePost(@Valid @ModelAttribute("articleVendu") ArticleVendu articleVendu,
-                                   BindingResult bindingResult, Model model) {
+    public String PageVendreUnArticlePost(@ModelAttribute("articleVendu") ArticleVendu articleVendu,
+                                          BindingResult bindingResult,
+                                          @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession) {
         if (bindingResult.hasErrors()) {
-            return "create_article";
+            System.out.println(bindingResult.getAllErrors());
+            return "redirect:/creer_article";
         }
 
-        articleVenduService.createArticleVendu(articleVendu);
-        System.out.println(articleVendu);
+        articleVendu.setUtilisateur(utilisateurEnSession);
+        articleVendu.setPrixVente(articleVendu.getPrixInitial());
+        articleVendu.setCategorie(articleVendu.getCategorie());
 
-        return "view_article";
+        articleVenduService.createArticleVendu(articleVendu);
+
+        return "redirect:/list_articles";
 
     }
+
+    @GetMapping("/fiche_article")
+    public String PageVenteNonCommencee(@RequestParam(name="noArticle") long noArticle,
+                                        Model model) {
+        ArticleVendu articleVendu = articleVenduService.getArticleVenduByNoArticle(noArticle);
+        model.addAttribute("articleVendu", articleVendu);
+        List<Categorie> categorieList = categorieService.findAll();
+        model.addAttribute("categorieList", categorieList);
+
+        System.out.println(articleVendu);
+
+        return "modifie_article";
+
+    }
+
+    @PostMapping ("/fiche_article")
+    public String PageVenteNonCommenceePost(@ModelAttribute("articleVendu") ArticleVendu articleVendu,
+                                          BindingResult bindingResult,
+                                            @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession) {
+        if (bindingResult.hasErrors()) {
+            return "modifie_article";
+        }
+
+        articleVendu.setNoArticle(articleVendu.getNoArticle());
+        articleVendu.setUtilisateur(utilisateurEnSession);
+        articleVendu.setPrixVente(articleVendu.getPrixInitial());
+        articleVendu.setCategorie(articleVendu.getCategorie());
+
+        System.out.println("Nouvel articleVendu = " + articleVendu);
+
+        articleVenduService.updateArticleVendu(articleVendu);
+
+        return "redirect:/list_articles";
+
+        }
 
 
 

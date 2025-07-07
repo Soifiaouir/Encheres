@@ -4,7 +4,7 @@
 					contenuPage=~{:: main},
 					ressourcesSupp=~{})}">
 <head>
-    <title>Title</title>
+    <title>Eni Enchere</title>
 </head>
 <body>
 <main class="bg-neutral-200 rounded-b-lg min-h-[93vh]">
@@ -12,6 +12,17 @@
         <h1 th:text="#{index.form.h1}"
                 class="text-4xl font-medium mb-5 text-neutral-900">
             Filtre</h1>
+
+        <!-- CODE HORRIBLE A SUPPRIMER PLUS TARD  -->
+
+        <ul>
+            <li><a href="/list_articles">Voir les articles que j'ai mis en vente</a></li>
+        </ul>
+        <br />
+        <br />
+        <br />
+
+        <!-- FIN DU CODE A SUPPRIMER  -->
 
         <form action="">
             <div class="w-full relative mb-4">
@@ -26,6 +37,7 @@
                     <option th:text="#{index.option.default}"></option>
                 </select>
             </div>
+
             <div class="w-full relative mb-3">
                 <div class="absolute top-0 -translate-y-3 ps-5">
                     <label th:text="#{index.label.search}"

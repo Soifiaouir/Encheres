@@ -10,6 +10,8 @@ import java.util.List;
 
 @Service
 public class EnchereServiceImpl implements EnchereService {
+
+
     private final EnchereDAO enchereDAO;
 
     @Autowired
@@ -33,6 +35,10 @@ public class EnchereServiceImpl implements EnchereService {
         return enchereDAO.readByUser(noUtilisateur);
     }
 
+    @Override
+    public List<Enchere> findListEnchere() {
+        return enchereDAO.readListEnchere();
+    }
     @Override
     public void createEnchere(Enchere enchere) {
             enchereDAO.createEnchere(enchere);

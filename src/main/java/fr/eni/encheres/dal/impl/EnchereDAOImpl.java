@@ -27,10 +27,9 @@ public class EnchereDAOImpl implements EnchereDAO {
     private final String SELECT_ID = "SELECT * FROM ENCHERES WHERE NO_ENCHERE = :noEnchere";
     private final String SELECT_BY_USER = "SELECT * FROM ENCHERES WHERE NO_UTILISATEUR = :noUtilisateur";
     private final String SELECT_ARTICLE = "SELECT * FROM ENCHERES WHERE NO_ARTICLE = :noArticle";
+    private final String SELECT_ALL = "SELECT NO_ENCHERE,DATE_ENCHERE, MONTANT_ENCHERE,NO_ARTICLE,NO_UTILISATEUR  FROM ENCHERES";
     private final String CREATE_ENCHERE ="INSERT INTO ENCHERES (DATE_ENCHERE, MONTANT_ENCHERE,NO_ARTICLE,NO_UTILISATEUR)" +
             " VALUE (date_enchere,:montant_enchere, :no_article, :no_utilisateur)";
-    private final String FIND_ALL_ENCHERES ="SELECT NO_ENCHERE, DATE_ENCHERE, MONTANT_ENCHERE, NO_ARTICLE, NO_UTILISATEUR FROM ENCHERES";
-
     private final String DELETE_ENCHERE ="DELETE FROM ENCHERES WHERE NO_ENCHERE = :noEnchere";
     private final String UPDATE_ENCHERE = "UPDATE ENCHERES SET DATE_ENCHERE = :dateeEnchere, " +
             "MONTANT-ENCHERE = :montant_enchere, NO_ENCHERE= :no_enchere," +
@@ -42,6 +41,10 @@ public class EnchereDAOImpl implements EnchereDAO {
     public EnchereDAOImpl(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+    @Override
+    public List<Enchere> readListEnchere() {
+        return jdbcTemplate.query(SELECT_ALL, new BeanPropertyRowMapper<>(Enchere.class));
+    }
 
     @Override
     public Enchere readByNoEnchere(long noEnchere) {
@@ -49,12 +52,6 @@ public class EnchereDAOImpl implements EnchereDAO {
         params.addValue("no_enchere", noEnchere);
 
         return jdbcTemplate.queryForObject(SELECT_ID,params, new BeanPropertyRowMapper<>(Enchere.class));
-    }
-
-    @Override
-    public List<Enchere> findListEncheres(long noArticleVendu) {
-
-        return null;
     }
 
     @Override
@@ -116,7 +113,7 @@ public class EnchereDAOImpl implements EnchereDAO {
             Enchere e = new Enchere();
             e.setNoEnchere(rs.getLong("NO_ENCHERE"));
             e.setDateEnchere(rs.getDate("DATE_ENCHERE").toLocalDate());
-            e.setMontantEnchere(rs.getInt("MONTANT-ENCHERE"));
+            e.setMontantEnchere(rs.getInt("MONTANT_ENCHERE"));
 
             Utilisateur utilisateur = new Utilisateur();
             utilisateur.setNoUtilisateur(rs.getLong("NO_UTILISATEUR"));

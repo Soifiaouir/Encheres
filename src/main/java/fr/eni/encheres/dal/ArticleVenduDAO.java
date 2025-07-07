@@ -1,23 +1,25 @@
 package fr.eni.encheres.dal;
 
 import fr.eni.encheres.bo.ArticleVendu;
+import fr.eni.encheres.bo.Utilisateur;
 
 import java.util.List;
 
 public interface ArticleVenduDAO {
 
-    ArticleVendu getArticleVendu(long id);
+    ArticleVendu getArticleVendu(long noArticle);
 
     void createArticle (ArticleVendu articleVendu);
 
     void updateArticle(ArticleVendu articleVendu);
 
-    void removeArticle (long id);
+    void removeArticle (long noArticle);
 
     List<ArticleVendu> getAllArticleVendu();
 
-    String findNomArticle (long id);
+    String findNomArticle (long noArticle);
 
-    int findPrixEnchere (long id);
+    int findPrixEnchere (long noArticle);
 
+    List<ArticleVendu> getListArticlesVenduByUtilisateur(Utilisateur utilisateur);
 }

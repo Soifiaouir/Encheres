@@ -19,4 +19,5 @@ body {
 
 div.relative:has(input:focus) label {
     color: #171717;
+
 }
