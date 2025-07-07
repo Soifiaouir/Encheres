@@ -18,8 +18,6 @@ public class UtilisateurConverter implements Converter<String, Utilisateur> {
     public Utilisateur convert(String noUtilisateur) {
         long id = Long.parseLong(noUtilisateur);
 
-        Utilisateur utilisateur = service.findUtilisateurById(id);
-
-        return utilisateur;
+        return service.findUtilisateurById(id);
     }
 }

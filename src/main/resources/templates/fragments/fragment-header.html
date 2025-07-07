@@ -2,43 +2,78 @@
         xmlns:sec="http://www.w3.org/1999/xhtml"
         th:fragment="frag-header">
 
-    <nav class="p-5 w-full rounded-b-lg fixed top-0">
-        <div class="grid grid-cols-5 items-center">
-            <div sec:authorize="!isAuthenticated()" class="col-span-5">
-                <div class="w-full flex items-center gap-3 text-sm">
-                    <a href="#"
-                        class="text-neutral-900 mrs-sheppards-regular font-black text-2xl">
-                        ENI <br> Encheres
-                    </a>
-                    <a href="/login"
-                       class="text-neutral-900 me-3 font-semibold ms-auto">
-                        Connexion
-                    </a>
-                    <div class="btn bg-lime-200 text-neutral-900 p-2 pb-1.5 font-semibold rounded-sm flex items-center gap-1">
-                        <a href="/signin">
-                            Inscription
-                        </a>
+    <nav class="py-5 w-full rounded-b-lg fixed top-0 bg-neutral-300 z-2">
+        <div sec:authorize="!isAuthenticated()" class="text-sm">
+            <div class="w-full grid grid-cols-12 items-center">
+                <div class="col-span-3 px-5 hidden lg:block">
+                    <a th:text="#{nav.a.brand}" href="#"
+                       class="text-neutral-900 sandler-font font-black text-xl mb-1"></a>
+                </div>
+                <div class="lg:col-span-6 col-span-12 px-5 flex items-center">
+                    <a th:text="#{nav.a.index}"
+                       th:href="@{/accueil}"
+                       class="transition duration-400 text-neutral-900 font-bold hover:scale-110 p-2 pb-1.5"></a>
+                    <div class="ms-auto">
+                        <a th:text="#{nav.a.fr}"
+                           th:classappend="${#locale.language == 'fr' ? 'active' : ''}"
+                           href="?language=fr"
+                           class="transition-all duration-400 text-neutral-900 font-bold opacity-20 hover:opacity-100"></a>
+                        <span class="mx-2">|</span>
+                        <a th:text="#{nav.a.en}"
+                           th:classappend="${#locale.language == 'en' ? 'active' : ''}"
+                           href="?language=en"
+                           class="transition-all duration-400 text-neutral-900 font-bold opacity-20 hover:opacity-100"></a>
                     </div>
-
+                    <a th:text="#{nav.a.connexion}"
+                       href="/login"
+                       class="text-neutral-900 font-bold ms-5 transition duration-400 hover:scale-110"></a>
+                    <div class="transition duration-400 btn bg-lime-200 hover:scale-110 hover:bg-yellow-200 text-neutral-900 lg:px-5 p-2 pb-1.5 font-bold rounded-sm ms-5">
+                        <a th:text="#{nav.a.inscription}"
+                           href="/signin"></a>
+                    </div>
                 </div>
             </div>
-            <div sec:authorize="isAuthenticated()" class="col-span-5">
-                <div class="w-full flex items-center gap-3 text-sm">
-                    <div class="btn bg-lime-200 text-neutral-900 p-2 pb-1.5 font-semibold rounded-sm flex items-center gap-1">
-                        <span class="font-bold pt-0.5">100</span>
-                        <img src="/img/money.png" width="25" alt="credit">
-                    </div>
-                    <div class="btn bg-neutral-900 text-neutral-200 p-2 pb-1.5 font-semibold rounded-sm flex items-center gap-1">
-                        <span class="font-bold pt-0.5"><a href="/creer_article">Vendre</a></span>
-                    </div>
-                    <a href="/login"
-                       class="text-neutral-900 me-3 font-semibold me-auto">
-                        Profil
+        </div>
+        <div sec:authorize="isAuthenticated()" class="text-sm">
+            <div class="w-full grid grid-cols-12 items-center">
+                <div class="col-span-3 px-5 hidden lg:block">
+                    <a th:text="#{nav.a.brand}" href="#"
+                       class="text-neutral-900 sandler-font font-black text-xl"></a>
+                </div>
+                <div class="lg:col-span-6 col-span-12 px-5 flex items-center">
+                    <a href="/credit"
+                       class="transition duration-400 btn bg-lime-200 hover:scale-110 hover:bg-yellow-200 text-neutral-900 lg:px-5 p-2 pb-1.5 font-bold rounded-sm flex items-center gap-1">
+                                <span th:text="${userSession != null && userSession.noUtilisateur > 0 ? userSession.credit : 0}"
+                                      class="font-bold"></span>
+                        <img src="/img/money-neutral-sm.png" width="20" alt="credit">
                     </a>
-                    <a href="/logout"
-                       class="text-neutral-900 font-semibold">
-                        Déconnexion
-                    </a>
+                    <div class="ms-3 transition duration-400 btn bg-neutral-900 hover:bg-neutral-700 hover:scale-110 text-neutral-300 lg:px-5 p-2 pb-1.5 font-bold rounded-sm">
+                            <span th:text="#{nav.a.vendre}"
+                                  class="font-bold pt-0.5"></span>
+                    </div>
+                    <a th:text="#{nav.a.index}"
+                       th:href="@{/accueil}"
+                       class="transition duration-400 text-neutral-900 ms-5 font-bold hover:scale-110 p-2 pb-1.5"></a>
+
+                    <a th:if="${param.user == null && userSession != null && userSession.noUtilisateur > 0 }"
+                       th:text="#{nav.a.profil}"
+                       th:href="@{/profil(user=${userSession.noUtilisateur})}"
+                       class="transition duration-400 text-neutral-900 ms-5 font-bold hover:scale-110 p-2 pb-1.5"></a>
+                    <div class="ms-auto">
+                        <a th:text="#{nav.a.fr}"
+                           th:classappend="${#locale.language == 'fr' ? 'active' : ''}"
+                           href="?language=fr"
+                           class="transition-all duration-400 text-neutral-900 font-bold opacity-20 hover:opacity-100"></a>
+                        <span class="mx-2">|</span>
+                        <a th:text="#{nav.a.en}"
+                           th:classappend="${#locale.language == 'en' ? 'active' : ''}"
+                           href="?language=en"
+                           class="transition-all duration-400 text-neutral-900 font-bold opacity-20 hover:opacity-100"></a>
+                    </div>
+
+                    <a th:text="#{nav.a.deconnexion}"
+                       href="/logout"
+                       class="transition duration-400 text-neutral-900 font-bold hover:scale-110 ms-5"></a>
                 </div>
             </div>
         </div>

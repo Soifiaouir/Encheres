@@ -1,62 +1,81 @@
 <!DOCTYPE html>
-<html data-th-replace="~{layouts/layout :: layout-enchere(
-					titrePage=~{:: title},
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      th:replace="~{
+                    layouts/layout :: layout-enchere(
+					titrePage='Accueil - Eni Encheres',
 					contenuPage=~{:: main},
-					ressourcesSupp=~{})}">
-<head>
-    <title>Eni Enchere</title>
-</head>
-<body>
-<main class="bg-neutral-200 rounded-b-lg min-h-[93vh]">
-    <section class="pt-30 px-5">
-        <h1 th:text="#{index.form.h1}"
-                class="text-4xl font-medium mb-5 text-neutral-900">
-            Filtre</h1>
-
-        <!-- CODE HORRIBLE A SUPPRIMER PLUS TARD  -->
-
-        <ul>
-            <li><a href="/list_articles">Voir les articles que j'ai mis en vente</a></li>
-        </ul>
-        <br />
-        <br />
-        <br />
-
-        <!-- FIN DU CODE A SUPPRIMER  -->
-
-        <form action="">
-            <div class="w-full relative mb-4">
-                <div class="absolute top-0 -translate-y-3 ps-5">
-                    <label th:text="#{index.label.categ}"
-                           for="categorie"
-                           class="control-label text-neutral-600 font-medium text-sm text-neutral-600 bg-neutral-200 px-2"></label>
-                </div>
-                <select name="categorie"
-                        id="categorie"
-                        class="border border-neutral-600 rounded-lg w-full p-2 pt-2.5">
-                    <option th:text="#{index.option.default}"></option>
-                </select>
+					ressourcesSupp=~{})
+					}">
+<main class="bg-neutral-300 rounded-b-lg min-h-[93vh]">
+    <section class="pt-25 grid grid-cols-12">
+        <div class="lg:col-start-4 lg:col-end-10 col-span-12 px-5">
+            <div sec:authorize="isAuthenticated()"
+                 th:if="${userSession != null && userSession.noUtilisateur > 0}"
+                 class="mb-10 relative font-bold text-6xl">
+                <h3 class="relative text-neutral-900"
+                    th:text="#{index.welcome.user(${userSession.pseudo})}">
+                </h3>
+                <span class="absolute top-0 start-0 text-lime-200 translate-2"
+                      th:text="#{index.welcome.user(${userSession.pseudo})}"></span>
             </div>
-
-            <div class="w-full relative mb-3">
-                <div class="absolute top-0 -translate-y-3 ps-5">
-                    <label th:text="#{index.label.search}"
-                           for="recherche"
-                           class="control-label text-neutral-600 font-medium text-sm text-neutral-600 bg-neutral-200 px-2"></label>
-                </div>
-                <input type="text"
-                       name="recherche"
-                       id="recherche"
-                       class="border border-neutral-600 rounded-lg w-full px-2 py-1 pt-1.5" required>
+            <div sec:authorize="!isAuthenticated()"
+                 class="mb-10 relative font-bold text-6xl">
+                <h3 class="relative text-neutral-900"
+                    th:text="#{index.welcome.visitor}">
+                </h3>
+                <span class="absolute top-0 start-0 text-lime-200 translate-2"
+                      th:text="#{index.welcome.visitor}"></span>
             </div>
-            <div class="text-sm mb-8">
-                <button th:text="#{index.form.submit}"
-                        class="bg-neutral-900 text-neutral-200 w-full py-2.5 pb-2 font-semibold rounded-lg"></button>
-            </div>
-        </form>
+        </div>
     </section>
-    <a href="/encheres/list_enchere">liste Enchere</a><br>
-    <a href="/encheres/listeArticleEnchere">liste Article</a><br>
+    <section class="grid grid-cols-12">
+        <div class="lg:col-start-4 lg:col-end-6 col-span-12 px-5 bg-neutral-300">
+            <h2 th:text="#{index.form.h1}"
+                class="text-4xl font-medium mb-5 text-neutral-900"></h2>
+            <form action=""
+                  method="GET">
+                <div class="w-full relative mb-4">
+                    <div class="absolute top-0 -translate-y-3 ps-5">
+                        <label th:text="#{index.label.categ}"
+                               for="categorie"
+                               class="control-label text-neutral-600 font-medium text-sm text-neutral-600 bg-neutral-300 px-2"></label>
+                    </div>
+                    <select name="categorie"
+                            id="categorie"
+                            class="border border-neutral-600 rounded-lg w-full p-2 pt-2.5">
+                        <option th:text="#{index.option.default}"></option>
+                    </select>
+                </div>
+                <div class="w-full relative mb-3">
+                    <div class="absolute top-0 -translate-y-3 ps-5">
+                        <label th:text="#{index.label.search}"
+                               for="recherche"
+                               class="control-label text-neutral-600 font-medium text-sm text-neutral-600 bg-neutral-300 px-2"></label>
+                    </div>
+                    <input type="text"
+                           th:placeholder="#{index.form.placeholder}"
+                           name="recherche"
+                           id="recherche"
+                           class="border border-neutral-600 rounded-lg w-full px-2 py-1 pt-1.5" required>
+                </div>
+                <div class="text-sm mb-4">
+                    <button th:text="#{index.form.submit}"
+                            class="btn bg-neutral-900 text-neutral-300 w-full py-2.5 pb-2 font-semibold rounded-lg"></button>
+                </div>
+            </form>
+        </div>
+        <div class="lg:col-start-6 lg:col-end-10 col-span-12 px-5 lg:ps-0">
+            <h2 th:text="#{index.encheres.title}" class="text-4xl font-medium mb-5 text-neutral-900 text-end"></h2>
+            <div class="bg-neutral-900 rounded-lg h-[100px] mb-4 w-full"></div>
+            <div class="bg-neutral-900 rounded-lg h-[100px] mb-4 w-full"></div>
+            <div class="bg-neutral-900 rounded-lg h-[100px] mb-4 w-full"></div>
+            <div class="bg-neutral-900 rounded-lg h-[100px] mb-4 w-full"></div>
+            <div class="bg-neutral-900 rounded-lg h-[100px] mb-4 w-full"></div>
+
+
+        </div>
+    </section>
 </main>
-</body>
 </html>

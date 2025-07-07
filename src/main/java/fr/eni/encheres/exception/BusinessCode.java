@@ -6,7 +6,6 @@ public class BusinessCode {
     public static final String DB_PSEUDO_VERIFICATION_ERROR = "db.pseudo.verification.error";
     public static final String DB_EMAIL_VERIFICATION_ERROR = "db.email.verification.error";
 
-    public static final String VALIDATION_INPUT_BLANK = "validation.input.blank";
-    public static final String VALIDATION_EMAIL_UNIQUE = "validation.email.unique";
-    public static final String VALIDATION_PSEUDO_UNIQUE = "validation.pseudo.unique";
+    public static final String ERROR_TECHNIQUE_EMAIL_VALIDATION = "service.validation.email.error";
+    public static final String ERROR_TECHNIQUE_PSEUDO_VALIDATION = "service.validation.pseudo.error";
 }

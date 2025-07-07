@@ -1,18 +1,25 @@
 <!DOCTYPE html>
-<html data-th-replace="~{layouts/layout-auth :: layout-enchere(
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{
+                    layouts/layout-auth :: layout-enchere(
 					titrePage='Connexion - Eni Encheres',
 					contenuPage=~{:: main},
-					ressourcesSupp=~{})}">
-<head>
-    <title>Title</title>
-</head>
-<body>
+					ressourcesSupp=~{})
+					}">
 <main class="min-h-[100vh] py-4 flex flex-col">
-    <div class="w-full px-5 my-auto">
-        <section>
+    <div class="w-full px-5 my-auto grid grid-cols-8">
+        <section class="lg:col-start-4 lg:col-end-6 col-span-8">
             <h1 th:text="#{login.view.h1}"
-                class="text-4xl font-medium mb-10 text-center text-neutral-900">
-                Inscription</h1>
+                class="text-4xl font-medium mb-10 text-center text-neutral-900"></h1>
+            <div
+                 th:if="${param.signin}"
+                 class="mb-4 flex items-center">
+                <hr class="border-teal-500 m-0 w-full">
+                <p th:text="#{signin.success.p}"
+                   class="text-teal-500 text-center text-xs font-semibold whitespace-nowrap px-2 mt-0.5"></p>
+                <hr class="border-teal-500 m-0 w-full">
+            </div>
             <form th:action="@{/login}"
                   method="POST">
                 <div class="w-full relative mb-4">
@@ -20,7 +27,7 @@
                         <label th:text="#{login.form.label-pseudo}"
                                th:classappend="${param.error} ? 'text-red-400' : 'text-neutral-600'"
                                for="pseudo"
-                               class="control-label font-medium text-sm text-neutral-600 bg-neutral-200 px-2"></label>
+                               class="control-label font-medium text-sm text-neutral-600 bg-neutral-300 px-2"></label>
                     </div>
                     <input th:classappend="${param.error} ? 'border-red-400' : 'border-neutral-600'"
                            type="text"
@@ -28,10 +35,10 @@
                            id="pseudo"
                            class="border rounded-lg w-full px-2 py-1 pt-1.5" required>
                     <div
-                         class="absolute bottom-0 end-0 translate-y-2 pe-5"
-                         th:if="${param.error}">
+                            class="absolute bottom-0 end-0 translate-y-2 pe-5"
+                            th:if="${param.error}">
 
-                        <p class="text-red-400 text-xs px-2 bg-neutral-200 font-semibold"
+                        <p class="text-red-400 text-xs px-2 bg-neutral-300 font-semibold"
                            th:text="#{login.error.p}"></p>
                     </div>
                 </div>
@@ -40,7 +47,7 @@
                         <label th:text="#{login.form.label-mdp}"
                                th:classappend="${param.error} ? 'text-red-400' : 'text-neutral-600'"
                                for="motDePasse"
-                               class="control-label text-neutral-600 font-medium text-sm text-neutral-600 bg-neutral-200 px-2"></label>
+                               class="control-label text-neutral-600 font-medium text-sm text-neutral-600 bg-neutral-300 px-2"></label>
                     </div>
                     <input th:classappend="${param.error} ? 'border-red-400' : 'border-neutral-600'"
                            type="password"
@@ -58,12 +65,10 @@
                     <p th:text="#{login.signin.a-hook}"
                        class="font-medium mb-2 text-neutral-900"></p>
                     <a th:text="#{login.signin.a}" href="/signin"
-                       class="bg-neutral-900 text-neutral-200 py-2 pb-1.5 font-medium rounded-lg w-full block mb-4"></a>
-
+                       class="bg-neutral-900 text-neutral-300 py-2 pb-1.5 font-medium rounded-lg w-full block mb-4"></a>
                 </div>
             </form>
         </section>
     </div>
 </main>
-</body>
 </html>

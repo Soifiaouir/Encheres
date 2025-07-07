@@ -3,9 +3,11 @@ package fr.eni.encheres.bll.impl;
 import fr.eni.encheres.bll.UtilisateurService;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.dal.UtilisateurDAO;
+import fr.eni.encheres.dto.UtilisateurDTO;
 import fr.eni.encheres.exception.BusinessCode;
 import fr.eni.encheres.exception.BusinessException;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,20 +16,26 @@ import java.util.List;
 public class UtilisateurServiceImpl implements UtilisateurService {
 
     private final UtilisateurDAO dao;
+    private final PasswordEncoder passwordEncoder;
 
-    public UtilisateurServiceImpl(UtilisateurDAO utilisateurDAO) {
+    public UtilisateurServiceImpl(UtilisateurDAO utilisateurDAO, PasswordEncoder passwordEncoder) {
         this.dao = utilisateurDAO;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public void createUtilisateur(Utilisateur utilisateur) {
+    public void createUtilisateur(UtilisateurDTO utilisateurDTO) {
         BusinessException be = new BusinessException();
         boolean isValid = true;
 
-        isValid &= emailValidate(utilisateur.getEmail(), be);
-        isValid &= pseudoValidate(utilisateur.getPseudo(), be);
+        isValid &= emailValidate(utilisateurDTO.getEmail(), be);
+        isValid &= pseudoValidate(utilisateurDTO.getPseudo(), be);
+        isValid &= passwordValidate(utilisateurDTO, be);
 
         if (isValid) {
+            Utilisateur utilisateur = utilisateurDTO.toUtilisateur();
+
+            utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
             dao.createUtilisateur(utilisateur);
         } else {
             throw be;
@@ -46,11 +54,11 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public Utilisateur findUtilisateurById(long id) {
-       try {
-           return dao.readUtilisateurById(id);
-       }  catch (DataAccessException e) {
-           throw new BusinessException(BusinessCode.DB_UTILISATEUR_INCONNU);
-       }
+        try {
+            return dao.readUtilisateurById(id);
+        } catch (DataAccessException e) {
+            throw new BusinessException(BusinessCode.DB_UTILISATEUR_INCONNU);
+        }
     }
 
     @Override
@@ -58,7 +66,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         try {
             System.out.println(pseudo);
             return dao.readUtilisateurByPseudo(pseudo);
-        }  catch (DataAccessException e) {
+        } catch (DataAccessException e) {
             throw new BusinessException(BusinessCode.DB_UTILISATEUR_INCONNU);
         }
     }
@@ -67,7 +75,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public List<Utilisateur> findAllUtilisateurs() {
         try {
             return dao.readAllUtilisateurs();
-        }  catch (DataAccessException e) {
+        } catch (DataAccessException e) {
             throw new BusinessException(BusinessCode.DB_UTILISATEUR_INCONNU);
         }
     }
@@ -76,7 +84,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public int checkPseudo(String pseudo) {
         try {
             return dao.checkUtilisateurByPseudo(pseudo);
-        }  catch (DataAccessException e) {
+        } catch (DataAccessException e) {
             throw new BusinessException(BusinessCode.DB_PSEUDO_VERIFICATION_ERROR);
         }
     }
@@ -85,7 +93,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public int checkEmail(String email) {
         try {
             return dao.checkUtilisateurByEmail(email);
-        }  catch (DataAccessException e) {
+        } catch (DataAccessException e) {
             throw new BusinessException(BusinessCode.DB_EMAIL_VERIFICATION_ERROR);
         }
     }
@@ -93,28 +101,32 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     // VALIDATION UTILISATEUR
     private boolean emailValidate(String email, BusinessException be) {
         try {
-            int countEmail = dao.checkUtilisateurByEmail(email);
-
-            if (countEmail > 0) {
-                be.add(BusinessCode.VALIDATION_EMAIL_UNIQUE);
+            if (dao.checkUtilisateurByEmail(email) > 0) {
+                be.addFieldError("email", "validation.email.unique");
                 return false;
             }
         } catch (DataAccessException e) {
-            be.add(BusinessCode.VALIDATION_EMAIL_UNIQUE);
+            be.add(BusinessCode.ERROR_TECHNIQUE_EMAIL_VALIDATION);
+        }
+        return true;
+    }
+
+    private boolean pseudoValidate(String pseudo, BusinessException be) {
+        try {
+            if (dao.checkUtilisateurByPseudo(pseudo) > 0) {
+                be.addFieldError("pseudo", "validation.pseudo.unique");
+                return false;
+            }
+        } catch (DataAccessException e) {
+            be.add(BusinessCode.ERROR_TECHNIQUE_PSEUDO_VALIDATION);
             return false;
         }
         return true;
     }
-    private boolean pseudoValidate(String pseudo, BusinessException be) {
-        try {
-            int countPseudo = dao.checkUtilisateurByPseudo(pseudo);
 
-            if (countPseudo > 0) {
-                be.add(BusinessCode.VALIDATION_PSEUDO_UNIQUE);
-                return false;
-            }
-        } catch (DataAccessException e) {
-            be.add(BusinessCode.VALIDATION_PSEUDO_UNIQUE);
+    private boolean passwordValidate(UtilisateurDTO utilisateurDTO, BusinessException be) {
+        if (!utilisateurDTO.getMotDePasse().equals(utilisateurDTO.getMotDePasseConfirm())) {
+            be.addFieldError("motDePasseConfirm", "validation.pwd-confirm");
             return false;
         }
         return true;

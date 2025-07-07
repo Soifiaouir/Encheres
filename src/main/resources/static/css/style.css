@@ -4,20 +4,46 @@
     font-family: "Nohemi";
     src: url('../font/Nohemi-VF.ttf') format("opentype")
 }
+@font-face {
+    font-family: "Sandler";
+    src: url('../font/Sandler Trial.otf')
+}
+@font-face {
+    font-family: "Fladeo";
+    src: url('../font/Fladeo.ttf')
+}
 .mrs-sheppards-regular {
     font-family: "Mrs Sheppards", cursive;
     font-style: normal;
     line-height: 1;
 }
-
+.sandler-font{
+    font-family: "Sandler", serif;
+}
+.fladeo-font{
+    font-family: "Fladeo", serif;
+}
 body {
     font-family: "Nohemi", sans-serif;
     font-optical-sizing: auto;
-    min-height: 100vh;
-    min-width: 100vw;
 }
 
 div.relative:has(input:focus) label {
     color: #171717;
+}
 
+a.active{
+    pointer-events: none;
+    opacity: 1 !important;
+}
+
+.neutral-shadow{
+   box-shadow: -15px -15px #171717;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px #D4D4D4 inset !important;
 }

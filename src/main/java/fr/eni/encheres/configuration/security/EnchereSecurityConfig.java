@@ -40,20 +40,17 @@ public class EnchereSecurityConfig {
                 .csrf(csrf -> csrf.disable()) // <----- temporaire
                 .authorizeHttpRequests(auth -> {
             auth
-                    .requestMatchers("/encheres/**").permitAll()
-
+//                    .requestMatchers(HttpMethod.GET,"/profil/*").authenticated()
+//                    .requestMatchers(HttpMethod.POST,"/profil/*").authenticated()
+                    .requestMatchers(HttpMethod.GET, "/credit").authenticated()
                     .requestMatchers(HttpMethod.GET,"/signin").permitAll()
                     .requestMatchers(HttpMethod.POST,"/signin").permitAll()
-                    .requestMatchers(HttpMethod.GET,"/creer_article").authenticated()
-                    .requestMatchers(HttpMethod.POST,"/creer_article").authenticated()
-
-
                     .requestMatchers("/*").permitAll()
                     .requestMatchers("/css/*").permitAll()
                     .requestMatchers("/font/*").permitAll()
                     .requestMatchers("/img/*").permitAll()
                     .requestMatchers("/.well-known/**").permitAll()  // Permet l'accès à /well-known
-                    .anyRequest().denyAll();
+                    .anyRequest().permitAll();
         });
 
         http.formLogin(form -> {

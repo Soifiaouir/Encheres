@@ -1,9 +1,13 @@
 package fr.eni.encheres.dto;
 
+import fr.eni.encheres.bo.Utilisateur;
+import fr.eni.encheres.exception.BusinessException;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
 public class UtilisateurDTO {
+
+    private long noUtilisateur;
 
     @NotBlank
     @Pattern(regexp = "^[a-zA-Z0-9]+$")
@@ -133,5 +137,24 @@ public class UtilisateurDTO {
 
     public void setAdministrateur(boolean administrateur) {
         this.administrateur = administrateur;
+    }
+
+    public Utilisateur toUtilisateur() {
+        Utilisateur utilisateur = new Utilisateur();
+
+        utilisateur.setNoUtilisateur(this.noUtilisateur);
+        utilisateur.setPseudo(this.pseudo);
+        utilisateur.setNom(this.nom);
+        utilisateur.setPrenom(this.prenom);
+        utilisateur.setEmail(this.email);
+        utilisateur.setTelephone(this.telephone);
+        utilisateur.setRue(this.rue);
+        utilisateur.setCodePostal(this.codePostal);
+        utilisateur.setVille(this.ville);
+        utilisateur.setMotDePasse(this.motDePasse);
+        utilisateur.setCredit(this.credit);
+        utilisateur.setAdministrateur(this.administrateur);
+
+        return utilisateur;
     }
 }
