@@ -1,0 +1,215 @@
+@charset "UTF-8";
+
+@import url('https://fonts.googleapis.com/css2?family=Mrs+Sheppards&display=swap');
+
+@font-face {
+	font-family: "Nohemi";
+	src: url('../font/Nohemi-VF.ttf') format("opentype")
+}
+
+* {
+	margin: 5px;
+	padding: 5px;
+	text-decoration: none;
+}
+
+nav {
+	font-size: 1.5em;
+	max-block-size: 100px;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	padding:5px;
+
+}
+
+li {
+	list-style: none;
+	display: inline-block;
+}
+
+.mrs-sheppards-regular {
+	font-family: "Mrs Sheppards", cursive;
+	font-style: normal;
+	line-height: 1;
+}
+
+
+body {
+	font-family: "Nohemi", sans-serif;
+	font-optical-sizing: auto;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	margin: 0;
+
+}
+
+
+.error {
+	color: red;
+	font-weight: bold;
+}
+
+header li {
+	list-style: none;
+	display: inline-block;
+	padding: 0 20px;
+}
+
+
+
+main {
+	margin-top: 15px;
+	margin-left: 15px;
+}
+
+main h1 {
+	margin: 10px;
+}
+
+.center-main {
+	display: flex;
+	width: 100%;
+	height: 300px;
+	margin: auto;
+}
+
+.center-section {
+	margin: auto;
+	text-align: center;
+}
+
+header {
+	padding: 5px;
+}
+
+h1 {
+	font-size: 1.8em;
+}
+
+footer {
+	background-color: #777;
+	padding: 10px;
+	text-align: center;
+	color: white;
+	height: auto;
+}
+
+nav li {
+	font-size: 1.5em;
+}
+
+table {
+	font-family: Arial, Helvetica, sans-serif;
+	border-collapse: collapse;
+	width: 90%;
+}
+
+table td, table th {
+	border: 1px solid #ddd;
+	padding: 8px;
+}
+
+table tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+table tr:hover {
+	background-color: #ddd;
+}
+
+table th {
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: left;
+	background-color: #000000;
+	color: white;
+}
+
+table a:link, table a:visited {
+	background-color: #f2f2f2;
+	color: #2e2b2b;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+}
+
+
+table a:hover, table a:active {
+	background-color: #9dc3c3;
+}
+
+form {
+	background-color: #f2f2f2;
+}
+
+form h1 {
+	margin: 15px;
+}
+
+.flex-outer li {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	margin: 10px;
+	border: 1px solid #d7cdcd;
+	color: #353030;
+	background-color: #e9e2e2;
+	padding:5px;
+}
+
+.flex-outer li a li {
+	background-color: #f6f4f4;
+}
+
+.flex-outer a li:hover {
+	background-color: #e3c2c2;
+}
+
+
+.flex-outer>li select {
+	flex: 1 0 220px;
+}
+
+.flex-outer>li>label {
+	flex: 1 0 120px;
+	max-width: 220px;
+}
+
+.flex-outer>li>label+* {
+	flex: 1 0 220px;
+}
+
+.flex-outer li button {
+	margin-left: auto;
+	margin-bottom: 5px; padding : 8px 16px;
+	border: none;
+	background: #333;
+	color: #f2f2f2;
+	text-transform: uppercase;
+	letter-spacing: .09em;
+	border-radius: 2px;
+	padding: 8px 16px
+}
+
+ li.bouton a{
+	margin-left: auto;
+	margin-bottom: 5px; padding : 10px 16px;
+	border: none;
+	background: #333;
+	color: #f2f2f2;
+	text-transform: uppercase;
+	letter-spacing: .09em;
+	border-radius: 2px;
+}
+
+::marker
+{
+	display:none;
+
+}
+
+div.relative:has(input:focus) label {
+	color: #171717;
+}

@@ -3,44 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <title>Modifier article</title>
+    <link rel="stylesheet" th:href="@{/css/formulaire-objet-temporaire.css}">
 </head>
 <body>
-<main>
-    <form  data-th-action="@{/articles/creer_article}"
-           data-th-object="${articleVendu}" >
-        <ul>
+<nav>
+    <td data-th-text="${'salut  ' + utilisateurEnSession.pseudo}"></td>
+</nav>
 
-            <input data-th-value="*{noArticle}" hidden>
+<main>
+    <form  data-th-action="@{/creer_article}"
+           data-th-object="${articleVendu}"
+    method="post">
+        <ul>
             <li>
                 <label for="idNom">Article : </label>
-                <input id="idNom" type="text" data-th-value="*{nomArticle}" />
+                <input id="idNom" type="text" placeholder="Objet" data-th-field="*{nomArticle}" required />
             </li>
             <li>
                 <label for="idDescription">Description : </label>
-                <input id="idDescription" type="text" data-th-value="*{description}" />
+                <input id="idDescription" type="text" placeholder="décrivez votre objet" data-th-field="*{description}" />
             </li>
             <li>
                 <label for="idCategorie">Categorie : </label>
-                <input id="idCategorie" type="text" data-th-value="*{categorie}" />
+                <select id="idCategorie" data-th-field="*{categorie.noCategorie}" >
+                    <option data-th-each="item : ${categorieList}"
+                            data-th-text="${item.libelle}"
+                            data-th-value="${item.noCategorie}"></option>
+                </select>
             </li>
             <li>
                 <label for="idPhoto"> photo de l'article : </label>
-                <input id="idPhoto" type="text" data-th-value="${'EN CONSTRUCTION'}" />
+                <input id="idPhoto" type="image" data-th-value="${'EN CONSTRUCTION'}" />
             </li>
             <li>
                 <label for="idMiseaprix"> Mise à prix : </label>
-                <input id="idMiseaprix" type="text" data-th-value="*{prixInitial}" />
+                <input id="idMiseaprix" type="number" min="1" data-th-field="*{prixInitial}" required />
             </li>
             <li>
                 <label for="idDebutEnchere"> Début de l'enchère : </label>
-                <input id="idDebutEnchere" type="text" data-th-value="*{dateDebutEncheres}" />
+                <input id="idDebutEnchere" type="date" placeholder="today" data-th-field="*{dateDebutEncheres}" />
             </li>
             <li>
                 <label for="idFinEnchere"> Fin de l'enchère : </label>
-                <input id="idFinEnchere" type="text" data-th-value="*{dateFinEncheres}" />
+                <input id="idFinEnchere" type="date"  data-th-field="*{dateFinEncheres}" />
+
             </li>
             <ul>Retrait (A FAIRE)
-              <!--  <li>
+           <!--   <li>
                     <label for="idRetraitRue"> Rue : </label>
                     <input id="idRetraitRue" type="text" data-th-value="*{lieuRetrait.rue}" readonly/></li>
                 <li>
@@ -54,11 +63,11 @@
             </ul>
 
             <li>
+                <button type="reset">Annuler</button>
                 <button type="submit">Enregistrer</button>
             </li>
 
         </ul>
-
     </form>
 
 </main>

@@ -2,17 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Liste d'articles vendus</title>
+    <link rel="stylesheet" th:href="@{/css/formulaire-objet-temporaire.css}">
 </head>
 <body>
+<nav>
+    <td data-th-text="${'salut ' + utilisateurEnSession.pseudo + ', comment va la vie à  ' + utilisateurEnSession.ville + ' ?'  }"></td>
+</nav>
+
 <main>
-    <h2><div data-th-text="${ 'Il y a ' + nmbArticles +' articles disponibles' }"></div></h2>
-    <table>
+
+    <h2><data-th-block data-th-if="${nmbArticles == 0}" data-th-text="${ 'Aucun article enregistré' }"></data-th-block>
+        <data-th-block data-th-if="${nmbArticles == 1}" data-th-text="${ 'Vous avez un seul article en vente' }"></data-th-block>
+        <data-th-block data-th-if="${nmbArticles > 1}" data-th-text="${ 'Vous avez ' + nmbArticles +' articles en ventes' }"></data-th-block>
+    </h2>
+        <data-table-block data-th-if="${nmbArticles > 0}">
+            <table>
         <thead>
         <tr>
             <th>Objet</th>
             <th>Prix Initial</th>
             <th>Prix en Enchere</th>
+            <th>Modifier</th>
         </tr>
         </thead>
         <tbody>
@@ -20,9 +31,18 @@
             <td data-th-text="${item.nomArticle}"></td>
             <td data-th-text="${item.prixInitial}"></td>
             <td data-th-text="${item.prixVente}"></td>
+            <td><a data-th-href="@{/fiche_article(noArticle=${item.noArticle})}">MODIFIER</a></td>
         </tr>
         </tbody>
-    </table>
+            </table>
+        </data-table-block>
+    <ul>
+        <li class="bouton">
+        <a href="/creer_article">Créer une nouvelle vente</a>
+        </li>
+
+    </ul>
+
 </main>
 </body>
 </html>

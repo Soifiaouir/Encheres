@@ -24,12 +24,8 @@ public class ArticleVenduServiceImpl implements ArticleVenduService {
     private RetraitDAO retraitDAO;
 
 
-    public ArticleVenduServiceImpl(ArticleVenduDAO articleVenduDAO, UtilisateurDAO utilisateurDAO, EnchereDAO enchereDAO, CategorieDAO categorieDAO, RetraitDAO retraitDAO) {
+    public ArticleVenduServiceImpl(ArticleVenduDAO articleVenduDAO) {
         this.articleVenduDAO = articleVenduDAO;
-        this.utilisateurDAO = utilisateurDAO;
-        this.enchereDAO = enchereDAO;
-        this.categorieDAO = categorieDAO;
-        this.retraitDAO = retraitDAO;
     }
 
     /** Method used to get the list of all the articles
@@ -47,14 +43,20 @@ public class ArticleVenduServiceImpl implements ArticleVenduService {
             });
         }
 
-//        List<ArticleVendu> articles = articleVenduDAO.getAllArticleVendu();
-//        for (ArticleVendu article : articles) {
-//            List<Enchere> encheres = enchereDAO.readByArticle(article.getNoArticle());
-//            article.setLstEncheres(encheres);
-//        }
-
         return lstArticlesVendus;
-//        return articles;
+    }
+
+    /** Method used to get the list of articles selled by someone
+     *
+     * @param utilisateur
+     * @return list
+     */
+
+
+    @Override
+    public List<ArticleVendu> getLstArticleVendusbyUtilisateur(Utilisateur utilisateur) {
+        List<ArticleVendu> lstArticlesVendus = articleVenduDAO.getListArticlesVenduByUtilisateur(utilisateur);
+        return lstArticlesVendus;
     }
 
     /** Method used to get one article by his id (noArticle)
@@ -70,10 +72,10 @@ public class ArticleVenduServiceImpl implements ArticleVenduService {
           if (articleVendu != null) {
            setUtilisateurCategorieRetrait1article(articleVendu);
 
-            List<Enchere> lstEncheres = enchereDAO.readByArticle(noArticle);
-            if (lstEncheres != null) {
-                articleVendu.setLstEncheres(lstEncheres);
-            }
+            //List<Enchere> lstEncheres = enchereDAO.readByArticle(noArticle);
+            //if (lstEncheres != null) {
+            //   articleVendu.setLstEncheres(lstEncheres);
+            //}
 
         }
 
@@ -92,8 +94,8 @@ public class ArticleVenduServiceImpl implements ArticleVenduService {
        // Enchere enchere = enchereDAO.readByNoEnchere(articleVendu
         //Categorie categorie = categorieDAO.readCategorie(articleVendu.getCategorie().getNoCategorie());
         //articleVendu.setCategorie(categorie);
-        Retrait retrait = retraitDAO.readByArticle(articleVendu.getNoArticle());
-        articleVendu.setLieuRetrait(retrait);
+        //Retrait retrait = retraitDAO.readByArticle(articleVendu.getNoArticle());
+        //articleVendu.setLieuRetrait(retrait);
 
     }
 

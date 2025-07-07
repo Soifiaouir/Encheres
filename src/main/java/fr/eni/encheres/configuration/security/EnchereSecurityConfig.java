@@ -44,6 +44,10 @@ public class EnchereSecurityConfig {
 
                     .requestMatchers(HttpMethod.GET,"/signin").permitAll()
                     .requestMatchers(HttpMethod.POST,"/signin").permitAll()
+                    .requestMatchers(HttpMethod.GET,"/creer_article").authenticated()
+                    .requestMatchers(HttpMethod.POST,"/creer_article").authenticated()
+
+
                     .requestMatchers("/*").permitAll()
                     .requestMatchers("/css/*").permitAll()
                     .requestMatchers("/font/*").permitAll()
