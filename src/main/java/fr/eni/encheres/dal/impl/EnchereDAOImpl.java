@@ -9,9 +9,6 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.core.simple.SimpleJdbcCall;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -25,16 +22,33 @@ import java.util.List;
 public class EnchereDAOImpl implements EnchereDAO {
 
     private final String SELECT_ID = "SELECT * FROM ENCHERES WHERE NO_ENCHERE = :noEnchere";
-    private final String SELECT_BY_USER = "SELECT * FROM ENCHERES WHERE NO_UTILISATEUR = :noUtilisateur";
-    private final String SELECT_ARTICLE = "SELECT * FROM ENCHERES WHERE NO_ARTICLE = :noArticle";
-    private final String CREATE_ENCHERE ="INSERT INTO ENCHERES (DATE_ENCHERE, MONTANT_ENCHERE,NO_ARTICLE,NO_UTILISATEUR)" +
-            " VALUE (date_enchere,:montant_enchere, :no_article, :no_utilisateur)";
-    private final String FIND_ALL_ENCHERES ="SELECT NO_ENCHERE, DATE_ENCHERE, MONTANT_ENCHERE, NO_ARTICLE, NO_UTILISATEUR FROM ENCHERES";
+
+    private final String SELECT_BY_USER =  "SELECT E.NO_ENCHERE, E.DATE_ENCHERE, E.MONTANT_ENCHERE, E.NO_ARTICLE, E.NO_UTILISATEUR, " +
+            "U.NOM, U.PRENOM, U.PSEUDO, A.NOM_ARTICLE FROM ENCHERES E " +
+            "LEFT JOIN UTILISATEURS U ON U.NO_UTILISATEUR = E.NO_UTILISATEUR " +
+            "LEFT JOIN ARTICLES_VENDUS A ON A.NO_ARTICLE = E.NO_ARTICLE " +
+            "WHERE E.NO_UTILISATEUR = :noUtilisateur";;
+
+    private final String SELECT_ARTICLE = "SELECT E.NO_ENCHERE, E.DATE_ENCHERE, E.MONTANT_ENCHERE, E.NO_UTILISATEUR, E.NO_ARTICLE, " +
+            "U.NOM, U.PRENOM, U.PSEUDO, A.NOM_ARTICLE FROM ENCHERES E " +
+            "LEFT JOIN UTILISATEURS U ON U.NO_UTILISATEUR = E.NO_UTILISATEUR " +
+            "LEFT JOIN ARTICLES_VENDUS A ON A.NO_ARTICLE = E.NO_ARTICLE " +
+            "WHERE E.NO_ARTICLE = :noArticle";
+
+
+    private final String SELECT_ALL = "SELECT E.NO_ENCHERE, E.DATE_ENCHERE, E.MONTANT_ENCHERE, " +
+            "E.NO_ARTICLE, E.NO_UTILISATEUR," + " U.NOM, U.PRENOM, U.PSEUDO, A.NOM_ARTICLE FROM ENCHERES E " +
+            "LEFT JOIN UTILISATEURS U ON U.NO_UTILISATEUR = E.NO_UTILISATEUR " +
+            "LEFT OUTER JOIN DBO.ARTICLES_VENDUS A ON A.NO_ARTICLE = E.NO_ARTICLE;";
+
+    private final String CREATE_ENCHERE ="INSERT INTO ENCHERES (DATE_ENCHERE, MONTANT_ENCHERE ,NO_ARTICLE,NO_UTILISATEUR)" +
+            " VALUES (:dateEnchere,:montantEnchere, :noArticle, :noUtilisateur)";
 
     private final String DELETE_ENCHERE ="DELETE FROM ENCHERES WHERE NO_ENCHERE = :noEnchere";
-    private final String UPDATE_ENCHERE = "UPDATE ENCHERES SET DATE_ENCHERE = :dateeEnchere, " +
-            "MONTANT-ENCHERE = :montant_enchere, NO_ENCHERE= :no_enchere," +
-            " NO_UTILISATEUR = :no_utilisateur where NO_ENCHERE = :no_enchere";
+
+    private final String UPDATE_ENCHERE = "UPDATE ENCHERES SET DATE_ENCHERE = :dateEnchere, " +
+            "MONTANT_ENCHERE = :montantEnchere,"+" NO_ARTICLE = :noArticle," +
+            "NO_UTILISATEUR = :noUtilisateur where NO_ENCHERE = :noEnchere";
 
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
@@ -42,30 +56,27 @@ public class EnchereDAOImpl implements EnchereDAO {
     public EnchereDAOImpl(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+    @Override
+    public List<Enchere> readListEnchere() {
+        return jdbcTemplate.query(SELECT_ALL, new EnchereMapper());
+    }
 
     @Override
     public Enchere readByNoEnchere(long noEnchere) {
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("no_enchere", noEnchere);
+        params.addValue("noEnchere", noEnchere);
 
         return jdbcTemplate.queryForObject(SELECT_ID,params, new BeanPropertyRowMapper<>(Enchere.class));
-    }
-
-    @Override
-    public List<Enchere> findListEncheres(long noArticleVendu) {
-
-        return null;
     }
 
     @Override
     public void createEnchere(Enchere enchere) {
         KeyHolder key = new GeneratedKeyHolder();
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("no_enchere", enchere.getNoEnchere());
-        params.addValue("date_enchere", enchere.getDateEnchere());
-        params.addValue("montant_enchere", enchere.getMontantEnchere());
-        params.addValue("no_article", enchere.getArticleConcerne().getNoArticle());
-        params.addValue("no_utilisateur", enchere.getEncherisseur().getNoUtilisateur());
+        params.addValue("dateEnchere", enchere.getDateEnchere());
+        params.addValue("montantEnchere", enchere.getMontantEnchere());
+        params.addValue("noArticle", enchere.getArticleConcerne().getNoArticle());
+        params.addValue("noUtilisateur", enchere.getEncherisseur().getNoUtilisateur());
 
         jdbcTemplate.update(CREATE_ENCHERE, params, key);
 
@@ -78,7 +89,7 @@ public class EnchereDAOImpl implements EnchereDAO {
     @Override
     public void deleteEnchere(long noEnchere) {
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("no_enchere", noEnchere);
+        params.addValue("noEnchere", noEnchere);
 
         jdbcTemplate.update(DELETE_ENCHERE, params);
     }
@@ -86,11 +97,10 @@ public class EnchereDAOImpl implements EnchereDAO {
     @Override
     public void updateEnchere(Enchere enchere) {
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("date_enchere", enchere.getDateEnchere());
-        params.addValue("montant_enchere", enchere.getMontantEnchere());
-        params.addValue("montant_enchere", enchere.getMontantEnchere());
-        params.addValue("no_article", enchere.getArticleConcerne().getNoArticle());
-        params.addValue("no_utilisateur", enchere.getEncherisseur().getNoUtilisateur());
+        params.addValue("dateEnchere", enchere.getDateEnchere());
+        params.addValue("montantEnchere", enchere.getMontantEnchere());
+        params.addValue("noArticle", enchere.getArticleConcerne().getNoArticle());
+        params.addValue("noUtilisateur", enchere.getEncherisseur().getNoUtilisateur());
 
         jdbcTemplate.update(UPDATE_ENCHERE, params);
 
@@ -99,14 +109,14 @@ public class EnchereDAOImpl implements EnchereDAO {
     @Override
     public List<Enchere> readByArticle(Long noArticle) {
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("no_article",noArticle);
+        params.addValue("noArticle",noArticle);
         return jdbcTemplate.query(SELECT_ARTICLE, params, new EnchereMapper());
     }
 
     @Override
     public List<Enchere> readByUser(Long noUtilisateur) {
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("no_utilisateur",noUtilisateur);
+        params.addValue("noUtilisateur",noUtilisateur);
         return jdbcTemplate.query(SELECT_BY_USER, params, new EnchereMapper());
     }
 
@@ -116,14 +126,20 @@ public class EnchereDAOImpl implements EnchereDAO {
             Enchere e = new Enchere();
             e.setNoEnchere(rs.getLong("NO_ENCHERE"));
             e.setDateEnchere(rs.getDate("DATE_ENCHERE").toLocalDate());
-            e.setMontantEnchere(rs.getInt("MONTANT-ENCHERE"));
+            e.setMontantEnchere(rs.getInt("MONTANT_ENCHERE"));
 
             Utilisateur utilisateur = new Utilisateur();
             utilisateur.setNoUtilisateur(rs.getLong("NO_UTILISATEUR"));
+            utilisateur.setNom(rs.getString("NOM"));
+            utilisateur.setPrenom(rs.getString("PRENOM"));
+            utilisateur.setPseudo(rs.getString("PSEUDO"));
+
             e.setEncherisseur(utilisateur);
 
             ArticleVendu articleVendu = new ArticleVendu();
             articleVendu.setNoArticle(rs.getLong("NO_ARTICLE"));
+            articleVendu.setNomArticle(rs.getString("NOM_ARTICLE"));
+
             e.setArticleConcerne(articleVendu);
 
             return e;

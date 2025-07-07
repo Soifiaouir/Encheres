@@ -24,8 +24,12 @@ public class ArticleVenduServiceImpl implements ArticleVenduService {
     private RetraitDAO retraitDAO;
 
 
-    public ArticleVenduServiceImpl(ArticleVenduDAO articleVenduDAO) {
+    public ArticleVenduServiceImpl(ArticleVenduDAO articleVenduDAO, UtilisateurDAO utilisateurDAO, EnchereDAO enchereDAO, CategorieDAO categorieDAO, RetraitDAO retraitDAO) {
         this.articleVenduDAO = articleVenduDAO;
+        this.utilisateurDAO = utilisateurDAO;
+        this.enchereDAO = enchereDAO;
+        this.categorieDAO = categorieDAO;
+        this.retraitDAO = retraitDAO;
     }
 
     /** Method used to get the list of all the articles
@@ -43,7 +47,14 @@ public class ArticleVenduServiceImpl implements ArticleVenduService {
             });
         }
 
+//        List<ArticleVendu> articles = articleVenduDAO.getAllArticleVendu();
+//        for (ArticleVendu article : articles) {
+//            List<Enchere> encheres = enchereDAO.readByArticle(article.getNoArticle());
+//            article.setLstEncheres(encheres);
+//        }
+
         return lstArticlesVendus;
+//        return articles;
     }
 
     /** Method used to get one article by his id (noArticle)
@@ -59,7 +70,7 @@ public class ArticleVenduServiceImpl implements ArticleVenduService {
           if (articleVendu != null) {
            setUtilisateurCategorieRetrait1article(articleVendu);
 
-            List<Enchere> lstEncheres = enchereDAO.findListEncheres(noArticle);
+            List<Enchere> lstEncheres = enchereDAO.readByArticle(noArticle);
             if (lstEncheres != null) {
                 articleVendu.setLstEncheres(lstEncheres);
             }

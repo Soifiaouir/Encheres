@@ -40,6 +40,7 @@ public class EnchereSecurityConfig {
                 .csrf(csrf -> csrf.disable()) // <----- temporaire
                 .authorizeHttpRequests(auth -> {
             auth
+                    .requestMatchers("/encheres/**").permitAll()
 
                     .requestMatchers(HttpMethod.GET,"/signin").permitAll()
                     .requestMatchers(HttpMethod.POST,"/signin").permitAll()

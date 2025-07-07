@@ -1,16 +1,21 @@
 package fr.eni.encheres.dal.impl;
 
 import fr.eni.encheres.bo.ArticleVendu;
+import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.bo.Retrait;
+import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.dal.ArticleVenduDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 
@@ -23,6 +28,16 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
 
      private final String FIND_ALL = "SELECT no_article, nom_article, description, date_debut_encheres, " +
              "date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie FROM articles_vendus ";
+
+//     private final String FIND_ALL = "SELECT a.no_article, a.nom_article, a.description, a.date_debut_encheres, " +
+//             "a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, " +
+//             "u.nom, u.prenom, u.pseudo, " +
+//             "e.no_enchere, e.date_enchere, e.montant_enchere, e.no_utilisateur, " +
+//             "eu.nom, eu.prenom, eu.pseudo " +
+//             "FROM articles_vendus a " +
+//             "LEFT JOIN utilisateurs u ON u.no_utilisateur = a.no_utilisateur " + // créateur/propriétaire de l'article
+//             "LEFT JOIN encheres e ON e.no_article = a.no_article " +
+//             "LEFT JOIN utilisateurs eu ON eu.no_utilisateur = e.no_utilisateur";
 
      private final String INSERT = "INSERT INTO articles_vendus(no_article, nom_article, description, date_debut_encheres, \" +\n" +
              "             \"date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie)"
@@ -133,6 +148,7 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
      @Override
      public List<ArticleVendu> getAllArticleVendu(){
           return jdbcTemplate.query(FIND_ALL, new BeanPropertyRowMapper<>(ArticleVendu.class));
+//          return jdbcTemplate.query(FIND_ALL, new ArticleMapper());
 
      }
 
@@ -164,6 +180,31 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
           return jdbcTemplate.queryForObject(FIND_PRIX_VENTE, params, Integer.class);
      }
 
-
+//     class ArticleMapper implements RowMapper<ArticleVendu> {
+//          @Override
+//          public ArticleVendu mapRow(ResultSet rs, int rowNum) throws SQLException {
+//               ArticleVendu a = new ArticleVendu();
+//               a.setNoArticle(rs.getLong("no_article"));
+//               a.setNomArticle(rs.getString("nom_article"));
+//               a.setDescription(rs.getString("description"));
+//               a.setDateDebutEncheres(rs.getDate("date_debut_encheres").toLocalDate());
+//               a.setDateFinEncheres(rs.getDate("date_fin_encheres").toLocalDate());
+//               a.setPrixVente(rs.getInt("prix_vente"));
+//
+//               Utilisateur utilisateur = new Utilisateur();
+//               utilisateur.setNoUtilisateur(rs.getLong("NO_UTILISATEUR"));
+//               utilisateur.setNom(rs.getString("NOM"));
+//               utilisateur.setPrenom(rs.getString("PRENOM"));
+//               utilisateur.setPseudo(rs.getString("PSEUDO"));
+//               a.setUtilisateur(utilisateur);
+//
+////               Enchere enchere = new  Enchere();
+////               enchere.setNoEnchere(rs.getLong("NO_ENCHERE"));
+////               enchere.setDateEnchere(rs.getDate("date_encheres").toLocalDate());
+////               enchere.setMontantEnchere(rs.getInt("montant_encheres"));
+////               a.setLstEncheres(enchere);
+//               return a;
+//          }
+//     }
 
 }

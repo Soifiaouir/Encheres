@@ -1,6 +1,7 @@
 package fr.eni.encheres.bo;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Enchere {
 
@@ -39,6 +40,14 @@ public class Enchere {
     public LocalDate getDateEnchere() {
         return dateEnchere;
     }
+
+
+    /* Method to format the date in french view */
+    public String getDateFormatee() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return this.dateEnchere.format(formatter);
+    }
+
 
     public void setDateEnchere(LocalDate dateEnchere) {
         this.dateEnchere = dateEnchere;
