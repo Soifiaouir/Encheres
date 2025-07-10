@@ -25,16 +25,7 @@ public class ArticleVendu {
     public ArticleVendu() {
     }
 
-    public ArticleVendu(String nomArticle, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres, int prixInitial, int prixVente) {
-        this.nomArticle = nomArticle;
-        this.description = description;
-        this.dateDebutEncheres = dateDebutEncheres;
-        this.dateFinEncheres = dateFinEncheres;
-        this.prixInitial = prixInitial;
-        this.prixVente = prixVente;
-    }
-
-    public ArticleVendu(long noArticle, String nomArticle, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres, int prixInitial, int prixVente) {
+    public ArticleVendu(long noArticle, String nomArticle, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres, int prixInitial, int prixVente, String etatVente, List<Enchere> lstEncheres) {
         this.noArticle = noArticle;
         this.nomArticle = nomArticle;
         this.description = description;
@@ -42,6 +33,19 @@ public class ArticleVendu {
         this.dateFinEncheres = dateFinEncheres;
         this.prixInitial = prixInitial;
         this.prixVente = prixVente;
+        this.etatVente = etatVente;
+        this.lstEncheres = new ArrayList<>();
+    }
+
+    public ArticleVendu(String nomArticle, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres, int prixInitial, int prixVente, String etatVente, List<Enchere> lstEncheres) {
+        this.nomArticle = nomArticle;
+        this.description = description;
+        this.dateDebutEncheres = dateDebutEncheres;
+        this.dateFinEncheres = dateFinEncheres;
+        this.prixInitial = prixInitial;
+        this.prixVente = prixVente;
+        this.etatVente = etatVente;
+        this.lstEncheres = new ArrayList<>();
     }
 
     public long getNoArticle() {
@@ -140,7 +144,6 @@ public class ArticleVendu {
         this.etatVente = etatVente;
     }
 
-
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("ArticleVendu{");
@@ -155,8 +158,15 @@ public class ArticleVendu {
         sb.append(", lieuRetrait=").append(lieuRetrait);
         sb.append(", utilisateur=").append(utilisateur);
         sb.append(", categorie=").append(categorie);
-        sb.append(", lstEncheres=").append(lstEncheres);
         sb.append('}');
         return sb.toString();
     }
+
+    public Enchere getDerniereEnchere(){
+        if (lstEncheres == null || lstEncheres.isEmpty()) {
+            return null;
+        }
+        return lstEncheres.get(lstEncheres.size()-1);
+    }
+
 }

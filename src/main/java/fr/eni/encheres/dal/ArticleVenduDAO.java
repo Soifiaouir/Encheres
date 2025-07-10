@@ -1,6 +1,7 @@
 package fr.eni.encheres.dal;
 
 import fr.eni.encheres.bo.ArticleVendu;
+import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Utilisateur;
 
 import java.util.List;
@@ -22,4 +23,6 @@ public interface ArticleVenduDAO {
     int findPrixEnchere (long noArticle);
 
     List<ArticleVendu> getListArticlesVenduByUtilisateur(Utilisateur utilisateur);
+
+    List<ArticleVendu> getListArticlesVenduByCategorie(long noCategorie);
 }

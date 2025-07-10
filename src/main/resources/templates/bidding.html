@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      th:replace="~{
+                    layouts/layout :: layout-enchere(
+					titrePage='Accueil - Eni Encheres',
+					contenuPage=~{:: main},
+					ressourcesSupp=~{})
+					}">
+<main class="bg-neutral-300 rounded-b-lg min-h-[93vh]">
+    <section class="pt-24 grid grid-cols-12">
+        <div class="lg:col-start-4 lg:col-end-10 col-span-12 px-5">
+            <h2 class="text-4xl font-medium mb-5 text-neutral-900"
+                data-th-text="'Enchérir sur : ' + ${article.nomArticle}"></h2>
+
+            <form data-th-action="@{/bid(noArticle=${noArticle})}"
+                  method="post"
+                  data-th-object="${enchere}"
+                  class="bg-white rounded-lg shadow-md p-6 mb-8 justify-between">
+
+                <div class="space-y-3">
+                    <label for="description">Description</label>
+                    <input id="description" type="text" class="text-lg text-neutral-800" data-th-value="${article.description}" readonly>
+                </div>
+                <div>
+                    <label for="categorie">Categorie</label>
+                    <input class="text-neutral-700" data-th-value="${article.categorie.libelle}"
+                           type="text"
+                           id="categorie"
+                           readonly>
+                </div>
+                <div class="space-y-3">
+                    <label for="montantEnchere" class="block text-neutral-600 font-medium mb-1">Votre enchère</label>
+                    <input type="number"
+                           data-th-field="*{montantEnchere}"
+                           id="montantEnchere"
+                           class="border border-neutral-600 rounded-lg w-full p-2 pt-2.5"
+                           data-th-min="${article.prixInitial}"
+                           data-th-value="${enchere.montantEnchere}"
+                           data-th-placeholder="${article.prixInitial}"
+                           required/>
+                </div>
+                <div class="space-y-3">
+                    <p>Date de Enchere</p>
+                    <p th:text="${#temporals.format(localDateTime, 'dd-MM-yyyy HH:mm')}"></p>
+                </div>
+                 <div class="space-y-3">
+                        <button
+                                type="submit"
+                                class="bg-neutral-900   text-neutral-300 w-full py-2.5 font-semibold rounded-lg hover:bg-blue-600 hover:text-white transition m-[5px]">
+                            Valider l'enchère
+                        </button>
+                        <button type="reset"
+                                class="bg-neutral-300 text-neutral-900 border border-neutral-600 w-full py-2.5 mt-2 font-semibold rounded-lg">
+                            Réinitialiser
+                        </button>
+
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+</html>
+
+

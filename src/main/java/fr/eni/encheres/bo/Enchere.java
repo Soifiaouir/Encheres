@@ -1,5 +1,8 @@
 package fr.eni.encheres.bo;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -9,7 +12,9 @@ public class Enchere {
 
     private LocalDate dateEnchere;
 
-    private int montantEnchere;
+    @NotNull(message = "Le montant de l'enchère est obligatoire")
+    @Min(value = 1, message = "Le montant doit être supérieur à 0")
+    private Integer montantEnchere;
 
     private Utilisateur encherisseur;
 
@@ -18,12 +23,12 @@ public class Enchere {
     public Enchere() {
     }
 
-    public Enchere(LocalDate dateEnchere, int montantEnchere) {
+    public Enchere(LocalDate dateEnchere, Integer montantEnchere) {
         this.dateEnchere = dateEnchere;
         this.montantEnchere = montantEnchere;
     }
 
-    public Enchere(long noEnchere, LocalDate dateEnchere, int montantEnchere) {
+    public Enchere(long noEnchere, LocalDate dateEnchere, Integer montantEnchere) {
         this.noEnchere = noEnchere;
         this.dateEnchere = dateEnchere;
         this.montantEnchere = montantEnchere;
@@ -53,11 +58,11 @@ public class Enchere {
         this.dateEnchere = dateEnchere;
     }
 
-    public int getMontantEnchere() {
+    public Integer getMontantEnchere() {
         return montantEnchere;
     }
 
-    public void setMontantEnchere(int montantEnchere) {
+    public void setMontantEnchere(Integer montantEnchere) {
         this.montantEnchere = montantEnchere;
     }
 

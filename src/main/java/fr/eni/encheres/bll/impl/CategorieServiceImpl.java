@@ -10,16 +10,18 @@ import java.util.List;
 
 @Service
 public class CategorieServiceImpl implements CategorieService {
-    @Override
-    public List<Categorie> findAll() {
-        return categorieDAO.getAll();
-    }
 
     private CategorieDAO categorieDAO;
 
     @Autowired
     public CategorieServiceImpl(CategorieDAO categorieDAO) {
         this.categorieDAO = categorieDAO;
+    }
+
+    @Override
+    public List<Categorie> findAll() {
+        List<Categorie> listCategories= categorieDAO.getAll();
+        return listCategories;
     }
 
     @Override

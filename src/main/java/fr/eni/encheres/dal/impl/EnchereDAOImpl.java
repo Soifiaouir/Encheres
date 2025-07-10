@@ -70,7 +70,7 @@ public class EnchereDAOImpl implements EnchereDAO {
     }
 
     @Override
-    public void createEnchere(Enchere enchere) {
+    public void createEnchere(Enchere enchere, Long noArticle) {
         KeyHolder key = new GeneratedKeyHolder();
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("dateEnchere", enchere.getDateEnchere());
