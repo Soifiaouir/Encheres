@@ -23,14 +23,13 @@ import java.util.List;
 public class ArticleVenduDAOImpl implements ArticleVenduDAO {
 
 
-     private final String FIND_BY_NUMBER = "SELECT A.no_article, A.nom_article, A.description, A.date_debut_encheres, " +
-             "A.date_fin_encheres, A.prix_initial, A.prix_vente, A.no_categorie, A.etat_vente, " +
-             "U.no_utilisateur, U.nom, U.prenom, U.pseudo, " +
-             "C.no_categorie, C.libelle " +
-             "FROM ARTICLES_VENDUS A " +
-             "LEFT JOIN UTILISATEURS U ON U.no_utilisateur = A.no_utilisateur " +
-             "LEFT JOIN CATEGORIES C ON C.no_categorie = A.no_categorie " +
-             "WHERE A.no_article = :noArticle";
+    private final String FIND_BY_NUMBER = "SELECT a.no_article, a. nom_article, a.description, a.date_debut_encheres, " +
+            "a.date_fin_encheres, a.prix_initial, a.prix_vente, a.etat_vente, a.no_categorie, " +
+            "c.no_categorie, c.libelle, u.no_utilisateur, u.nom, u.prenom, u.pseudo, u.rue, u.code_postal, u.ville, r.rue, r.code_postal, r.ville " +
+            "FROM articles_vendus a LEFT JOIN UTILISATEURS u ON a.no_utilisateur = u.no_utilisateur " +
+            "LEFT JOIN CATEGORIES c on c.no_categorie = a.no_categorie " +
+            "LEFT JOIN RETRAITS r on a.no_article = r.no_article " +
+            "WHERE a.no_article = :noArticle";
 
 
      private final String FIND_ALL = "SELECT no_article, nom_article, description, date_debut_encheres, " +
@@ -66,10 +65,13 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
 
      private final String FIND_CATEGORIE = "SELECT a.no_article, a.description, a.nom_article, a.date_debut_encheres, " +
              " a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, a.etat_vente , " +
-             " u.no_utilisateur, u.nom, u.prenom, u.pseudo, c.no_categorie, c.libelle" +
+             " u.no_utilisateur, u.nom, u.prenom, u.pseudo, u.code_postale, u.ville" +
+             " c.no_categorie, c.libelle, " +
+             "r.rue, r.code_postal, r.ville " +
              "    FROM dbo.ARTICLES_VENDUS a" +
              "    LEFT JOIN UTILISATEURS u ON u.no_utilisateur = a.no_utilisateur" +
              "    LEFT JOIN CATEGORIES c ON c.no_categorie = a.no_categorie" +
+             "    LEFT JOIN RETRAITS r ON r.no_article = a.no_article" +
              "    WHERE a.no_categorie = :noCategorie";
      ;
 
