@@ -7,12 +7,12 @@
 					contenuPage=~{:: main},
 					ressourcesSupp=~{})
 					}">
-<main class="min-h-[100vh] py-4 flex flex-col">
+<main class="min-h-[93vh] bg-neutral-300 rounded-b-lg py-4 flex flex-col">
     <div class="w-full px-5 mt-auto grid grid-cols-8">
 
-        <section class="lg:col-start-4 lg:col-end-6 col-span-8">
+        <section class="pt-25 lg:col-start-4 lg:col-end-6 col-span-8">
             <h1 th:text="#{signin.view.h1}"
-                class="text-4xl font-medium mb-10 text-center text-neutral-900"></h1>
+                class="text-4xl font-medium  sandler-font mb-10 text-center text-neutral-900"></h1>
             <form action="/signin"
                   method="POST"
                   th:object="${utilisateurDTO}">

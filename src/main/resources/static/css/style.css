@@ -28,10 +28,13 @@ body {
     font-optical-sizing: auto;
 }
 
-div.relative:has(input:focus) label {
+div.relative:has(input:focus-visible) label {
     color: #171717;
 }
 
+div.relative:has(input:focus-visible) label.dark {
+    color: #fff;
+}
 a.active{
     pointer-events: none;
     opacity: 1 !important;

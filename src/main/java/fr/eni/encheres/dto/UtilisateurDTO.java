@@ -7,37 +7,46 @@ import jakarta.validation.constraints.Pattern;
 
 public class UtilisateurDTO {
 
+    public interface SignInValidation extends
+            UpdateInfoValidation,
+            UpdateAdresseValidation,
+            UpdatePwdValidation {}
+
+    public interface UpdateInfoValidation {};
+    public interface UpdateAdresseValidation {};
+    public interface UpdatePwdValidation {};
+
     private long noUtilisateur;
 
-    @NotBlank
-    @Pattern(regexp = "^[a-zA-Z0-9]+$")
+    @NotBlank(groups = UpdateInfoValidation.class)
+    @Pattern(regexp = "^[a-zA-Z0-9]+$", groups = UpdateInfoValidation.class)
     private String pseudo;
 
-    @NotBlank
+    @NotBlank(groups = UpdateInfoValidation.class)
     private String nom;
 
-    @NotBlank
+    @NotBlank(groups = UpdateInfoValidation.class)
     private String prenom;
 
-    @NotBlank
+    @NotBlank(groups = UpdateInfoValidation.class)
     private String email;
 
-    @NotBlank
+    @NotBlank(groups = UpdateInfoValidation.class)
     private String telephone;
 
-    @NotBlank
+    @NotBlank(groups = UpdateAdresseValidation.class)
     private String rue;
 
-    @NotBlank
+    @NotBlank(groups = UpdateAdresseValidation.class)
     private String codePostal;
 
-    @NotBlank
+    @NotBlank(groups = UpdateAdresseValidation.class)
     private String ville;
 
-    @NotBlank
+    @NotBlank(groups = UpdatePwdValidation.class)
     private String motDePasse;
 
-    @NotBlank
+    @NotBlank(groups = UpdatePwdValidation.class)
     private String motDePasseConfirm;
 
     private int credit = 100;
@@ -139,6 +148,31 @@ public class UtilisateurDTO {
         this.administrateur = administrateur;
     }
 
+    public long getNoUtilisateur() {
+        return noUtilisateur;
+    }
+
+    public void setNoUtilisateur(long noUtilisateur) {
+        this.noUtilisateur = noUtilisateur;
+    }
+
+    public UtilisateurDTO() {};
+
+    public UtilisateurDTO(Utilisateur utilisateur) {
+        this.setNoUtilisateur(utilisateur.getNoUtilisateur());
+        this.setPseudo(utilisateur.getPseudo());
+        this.setNom(utilisateur.getNom());
+        this.setPrenom(utilisateur.getPrenom());
+        this.setEmail(utilisateur.getEmail());
+        this.setTelephone(utilisateur.getTelephone());
+        this.setRue(utilisateur.getRue());
+        this.setCodePostal(utilisateur.getCodePostal());
+        this.setVille(utilisateur.getVille());
+        this.setMotDePasse(utilisateur.getMotDePasse());
+        this.setCredit(utilisateur.getCredit());
+        this.setAdministrateur(utilisateur.isAdministrateur());
+    }
+
     public Utilisateur toUtilisateur() {
         Utilisateur utilisateur = new Utilisateur();
 
@@ -156,5 +190,21 @@ public class UtilisateurDTO {
         utilisateur.setAdministrateur(this.administrateur);
 
         return utilisateur;
+    }
+
+    public UtilisateurDTO merge(Utilisateur utilisateur) {
+        if(this.noUtilisateur == 0) this.setNoUtilisateur(utilisateur.getNoUtilisateur());
+        if(this.pseudo == null) this.setPseudo(utilisateur.getPseudo());
+        if(this.nom == null) this.setNom(utilisateur.getNom());
+        if(this.prenom == null) this.setPrenom(utilisateur.getPrenom());
+        if(this.email == null) this.setEmail(utilisateur.getEmail());
+        if(this.telephone == null) this.setTelephone(utilisateur.getTelephone());
+        if(this.rue == null) this.setRue(utilisateur.getRue());
+        if(this.codePostal == null) this.setCodePostal(utilisateur.getCodePostal());
+        if(this.ville == null) this.setVille(utilisateur.getVille());
+        if(this.credit != utilisateur.getCredit()) this.setCredit(utilisateur.getCredit());
+        if(this.administrateur != utilisateur.isAdministrateur()) this.setAdministrateur(utilisateur.isAdministrateur());
+
+        return this;
     }
 }

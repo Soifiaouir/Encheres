@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{
+                    layouts/layout :: layout-enchere(
+					titrePage='Erreur - Eni Encheres',
+					contenuPage=~{:: main},
+					ressourcesSupp=~{})
+					}" xmlns="http://www.w3.org/1999/html">
+
+<main class="bg-neutral-300 rounded-b-lg min-h-[93vh] grid grid-cols-12">
+    <nav class="py-5 w-full rounded-b-lg fixed top-0 bg-neutral-300 z-2">
+        <div class="text-sm">
+            <div class="w-full grid grid-cols-12 items-center">
+                <div class="col-span-3 px-5 hidden lg:block">
+                    <a th:text="#{nav.a.brand}" href="#"
+                       class="text-neutral-900 sandler-font font-black text-xl mb-1"></a>
+                </div>
+                <div class="lg:col-span-6 col-span-12 px-5 flex items-center">
+                    <a th:text="#{nav.a.index}"
+                       th:href="@{/accueil}"
+                       class="transition duration-400 text-neutral-900 font-bold hover:scale-110 p-2 pb-1.5"></a>
+                    <div class="ms-auto">
+                        <a th:text="#{nav.a.fr}"
+                           th:classappend="${#locale.language == 'fr' ? 'active' : ''}"
+                           href="?language=fr"
+                           class="transition-all duration-400 text-neutral-900 font-bold opacity-20 hover:opacity-100"></a>
+                        <span class="mx-2">|</span>
+                        <a th:text="#{nav.a.en}"
+                           th:classappend="${#locale.language == 'en' ? 'active' : ''}"
+                           href="?language=en"
+                           class="transition-all duration-400 text-neutral-900 font-bold opacity-20 hover:opacity-100"></a>
+                    </div>
+                    <a th:text="#{nav.a.connexion}"
+                       href="/login"
+                       class="text-neutral-900 font-bold ms-5 transition duration-400 hover:scale-110"></a>
+                    <div class="transition duration-400 btn bg-lime-200 hover:scale-110 hover:bg-yellow-200 text-neutral-900 lg:px-5 p-2 pb-1.5 font-bold rounded-sm ms-5">
+                        <a th:text="#{nav.a.inscription}"
+                           href="/signin"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <section class="my-auto px-5 lg:col-start-4 lg:col-end-10 col-span-12">
+        <div class="text-center mb-5 pb-5">
+            <h3 th:text="#{compte.desactivation.titre}" class="font-black sandler-font mb-5 text-2xl"></h3>
+            <div class="relative text-7xl mb-5">
+                <h1 class="font-black">
+                    <span th:text="#{compte.desactivation.auRevoir}"></span> <br>
+                    <span th:text="${pseudoActif}"></span>
+                </h1>
+                <span class="absolute top-0 start-0 w-full text-center text-lime-200 translate-1 font-black">
+                     <span th:text="#{compte.desactivation.auRevoir}"></span> <br>
+                     <span th:text="${pseudoActif}"/>
+                </span>
+            </div>
+            <p class="mx-50 text-sm">
+                <b th:text="#{compte.desactivation.message1}"></b><br>
+                <span th:text="#{compte.desactivation.message2}"></span>
+            </p>
+            <p class="mt-2 text-sm" th:text="#{compte.desactivation.message3}"></p>
+            <a href="/"
+               class="mx-auto mt-4 block w-fit text-sm">
+                <div th:text="#{compte.desactivation.retour}" class="transition duration-400 px-5 w-fit btn bg-neutral-900 hover:bg-neutral-700 hover:scale-110 text-neutral-300 lg:px-5 p-2 pb-1.5 font-bold rounded-sm flex items-center gap-1">
+                </div>
+            </a>
+        </div>
+    </section>
+</main>
+</html>

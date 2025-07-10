@@ -1,30 +1,51 @@
 package fr.eni.encheres.ihm;
 
 import fr.eni.encheres.bll.ArticleVenduService;
+import fr.eni.encheres.bll.CategorieService;
 import fr.eni.encheres.bll.EnchereService;
 import fr.eni.encheres.bll.UtilisateurService;
 import fr.eni.encheres.bo.ArticleVendu;
+import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.bo.Utilisateur;
+import jdk.jshell.execution.Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/encheres")
 @Controller
+@SessionAttributes("userSession")
 public class EnchereController {
-    EnchereService eService;
-    UtilisateurService uService;
-    ArticleVenduService aService;
+    private final EnchereService eService;
+    private final UtilisateurService uService;
+    private final ArticleVenduService aService;
+    private final CategorieService cService;
+    private static final Logger log = LoggerFactory.getLogger(EnchereController.class);
 
-    public EnchereController(EnchereService eService, UtilisateurService uService, ArticleVenduService aService) {
+
+    public EnchereController(EnchereService eService, UtilisateurService uService, ArticleVenduService aService, CategorieService cService) {
         this.eService = eService;
         this.uService = uService;
         this.aService = aService;
+        this.cService = cService;
     }
 
+
+
+
+     @GetMapping({"/", "accueil"})
+    public String index(Model model) {
+
+        List<Categorie> lstCateg = cService.findAll();
+        model.addAttribute("categories", lstCateg);
+        log.info(lstCateg.toString());
+
+        return "index";
+    }
     @GetMapping("/list_enchere")
     public String listEncheres(Model model) {
         List<Enchere> encheres = eService.findListEnchere();

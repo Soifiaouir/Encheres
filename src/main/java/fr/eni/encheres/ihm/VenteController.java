@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.naming.Binding;
 import java.util.List;
 
-@SessionAttributes({"utilisateurEnSession"})
+@SessionAttributes({"userSession"})
 @Controller
 public class VenteController {
 
@@ -32,18 +32,10 @@ public class VenteController {
         this.categorieService = categorieService;
     }
 
-    // Méthode pour charger les données  de l'utilisateur
-    @ModelAttribute("utilisateurEnSession")
-    public Utilisateur getUtilisateurEnSession() {
-        Utilisateur utilisateur = utilisateurService.findUtilisateurById(1);
-        return utilisateur;
-    }
-
-
 
     @GetMapping("/list_articles")
-    public String pagesListesArticles(Model model) {
-        List<ArticleVendu> list = articleVenduService.getLstArticleVendusbyUtilisateur(getUtilisateurEnSession());
+    public String pagesListesArticles(@ModelAttribute("userSession") Utilisateur utilisateur, Model model) {
+        List<ArticleVendu> list = articleVenduService.getLstArticleVendusbyUtilisateur(utilisateur);
         model.addAttribute("articlesLst", list);
 
         int articleListSize = list.size();
@@ -54,7 +46,7 @@ public class VenteController {
     }
 
     @GetMapping("/creer_article")
-    public String PageVendreUnArticle( @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, Model model) {
+    public String PageVendreUnArticle( @ModelAttribute("userSession") Utilisateur utilisateurEnSession, Model model) {
         ArticleVendu article = new ArticleVendu();
         model.addAttribute("articleVendu", article);
 

@@ -11,7 +11,7 @@
     <!-- CSS -->
     <link rel="stylesheet" data-th-href="@{/css/style.css}">
 </head>
-<body class="bg-neutral-300">
+<body class="bg-neutral-900">
 <div th:replace="~{fragments/fragment-header-auth :: frag-auth-header}"></div>
 
 <!-- Rendre variable le contenu de la page -->
@@ -19,5 +19,6 @@
 </main>
 
 <!-- Intégration du fragment de pied de page -->
+<div th:replace="~{fragments/fragment-footer :: frag-footer}"></div>
 </body>
 </html>

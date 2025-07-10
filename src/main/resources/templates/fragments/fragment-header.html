@@ -47,33 +47,35 @@
                                       class="font-bold"></span>
                         <img src="/img/money-neutral-sm.png" width="20" alt="credit">
                     </a>
-                    <div class="ms-3 transition duration-400 btn bg-neutral-900 hover:bg-neutral-700 hover:scale-110 text-neutral-300 lg:px-5 p-2 pb-1.5 font-bold rounded-sm">
+                        <a class="ms-3 transition duration-400 btn bg-neutral-900 hover:bg-neutral-700 hover:scale-110 text-neutral-300 lg:px-5 p-2 pb-1.5 font-bold rounded-sm"
+                                href="/creer_article">
                             <span th:text="#{nav.a.vendre}"
                                   class="font-bold pt-0.5"></span>
-                    </div>
+                        </a>
                     <a th:text="#{nav.a.index}"
                        th:href="@{/accueil}"
-                       class="transition duration-400 text-neutral-900 ms-5 font-bold hover:scale-110 p-2 pb-1.5"></a>
+                       class="hidden lg:inline transition duration-400 text-neutral-900 ms-5 font-bold hover:scale-110 p-2 pb-1.5"></a>
 
                     <a th:if="${param.user == null && userSession != null && userSession.noUtilisateur > 0 }"
                        th:text="#{nav.a.profil}"
                        th:href="@{/profil(user=${userSession.noUtilisateur})}"
                        class="transition duration-400 text-neutral-900 ms-5 font-bold hover:scale-110 p-2 pb-1.5"></a>
-                    <div class="ms-auto">
-                        <a th:text="#{nav.a.fr}"
-                           th:classappend="${#locale.language == 'fr' ? 'active' : ''}"
-                           href="?language=fr"
-                           class="transition-all duration-400 text-neutral-900 font-bold opacity-20 hover:opacity-100"></a>
-                        <span class="mx-2">|</span>
-                        <a th:text="#{nav.a.en}"
-                           th:classappend="${#locale.language == 'en' ? 'active' : ''}"
-                           href="?language=en"
-                           class="transition-all duration-400 text-neutral-900 font-bold opacity-20 hover:opacity-100"></a>
+                    <div class="ms-auto flex items-center gap-5">
+                        <div class="ms-auto hidden lg:block">
+                            <a th:text="#{nav.a.fr}"
+                               th:classappend="${#locale.language == 'fr' ? 'active' : ''}"
+                               href="?language=fr"
+                               class="transition-all duration-400 text-neutral-900 font-bold opacity-20 hover:opacity-100"></a>
+                            <span class="mx-2">|</span>
+                            <a th:text="#{nav.a.en}"
+                               th:classappend="${#locale.language == 'en' ? 'active' : ''}"
+                               href="?language=en"
+                               class="transition-all duration-400 text-neutral-900 font-bold opacity-20 hover:opacity-100"></a>
+                        </div>
+                        <a th:text="#{nav.a.deconnexion}"
+                           href="/logout"
+                           class="transition duration-400 text-neutral-900 font-bold hover:scale-110"></a>
                     </div>
-
-                    <a th:text="#{nav.a.deconnexion}"
-                       href="/logout"
-                       class="transition duration-400 text-neutral-900 font-bold hover:scale-110 ms-5"></a>
                 </div>
             </div>
         </div>

@@ -14,26 +14,26 @@
             <div sec:authorize="isAuthenticated()"
                  th:if="${userSession != null && userSession.noUtilisateur > 0}"
                  class="mb-10 relative font-bold text-6xl">
-                <h3 class="relative text-neutral-900"
+                <h3 class=" sandler-font text-neutral-900"
                     th:text="#{index.welcome.user(${userSession.pseudo})}">
                 </h3>
-                <span class="absolute top-0 start-0 text-lime-200 translate-2"
+                <span class="absolute top-0 sandler-font start-0 text-lime-200 translate-1"
                       th:text="#{index.welcome.user(${userSession.pseudo})}"></span>
             </div>
             <div sec:authorize="!isAuthenticated()"
                  class="mb-10 relative font-bold text-6xl">
-                <h3 class="relative text-neutral-900"
+                <h3 class=" sandler-font text-neutral-900"
                     th:text="#{index.welcome.visitor}">
                 </h3>
-                <span class="absolute top-0 start-0 text-lime-200 translate-2"
+                <span class="absolute top-0 start-0 sandler-font text-lime-200 translate-1"
                       th:text="#{index.welcome.visitor}"></span>
             </div>
         </div>
     </section>
     <section class="grid grid-cols-12">
         <div class="lg:col-start-4 lg:col-end-6 col-span-12 px-5 bg-neutral-300">
-            <h2 th:text="#{index.form.h1}"
-                class="text-4xl font-medium mb-5 text-neutral-900"></h2>
+            <h2  th:text="#{index.form.h1}"
+                class="text-4xl font-medium mb-5 text-neutral-900  sandler-font"></h2>
             <form action=""
                   method="GET">
                 <div class="w-full relative mb-4">
@@ -45,7 +45,7 @@
                     <select name="categorie"
                             id="categorie"
                             class="border border-neutral-600 rounded-lg w-full p-2 pt-2.5">
-                        <option th:text="#{index.option.default}"></option>
+                        <option th:each="item : ${categories}" th:value="${item.noCategorie}" th:text="${item.libelle}"></option>
                     </select>
                 </div>
                 <div class="w-full relative mb-3">
@@ -67,7 +67,7 @@
             </form>
         </div>
         <div class="lg:col-start-6 lg:col-end-10 col-span-12 px-5 lg:ps-0">
-            <h2 th:text="#{index.encheres.title}" class="text-4xl font-medium mb-5 text-neutral-900 text-end"></h2>
+            <h2 th:text="#{index.encheres.title}" class="text-4xl  sandler-font font-medium mb-5 text-neutral-900 text-end"></h2>
             <div class="bg-neutral-900 rounded-lg h-[100px] mb-4 w-full"></div>
             <div class="bg-neutral-900 rounded-lg h-[100px] mb-4 w-full"></div>
             <div class="bg-neutral-900 rounded-lg h-[100px] mb-4 w-full"></div>
