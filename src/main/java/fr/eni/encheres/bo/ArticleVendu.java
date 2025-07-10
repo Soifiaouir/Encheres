@@ -1,18 +1,34 @@
 package fr.eni.encheres.bo;
 
+import jakarta.validation.constraints.*;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ArticleVendu {
     private long noArticle;
+
+    @NotBlank
+    @Pattern(regexp = "^[a-zA-Z0-9\\-]+$")
     private String nomArticle;
+
+    @NotBlank
     private String description;
+
+    @FutureOrPresent
     private LocalDate dateDebutEncheres;
+
+    @Future
     private LocalDate dateFinEncheres;
+
+    @Positive
     private int prixInitial;
     private int prixVente;
-    private String etatVente;
+    private Integer etatVente;
 
     private Retrait lieuRetrait;
 
@@ -25,16 +41,7 @@ public class ArticleVendu {
     public ArticleVendu() {
     }
 
-    public ArticleVendu(String nomArticle, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres, int prixInitial, int prixVente) {
-        this.nomArticle = nomArticle;
-        this.description = description;
-        this.dateDebutEncheres = dateDebutEncheres;
-        this.dateFinEncheres = dateFinEncheres;
-        this.prixInitial = prixInitial;
-        this.prixVente = prixVente;
-    }
-
-    public ArticleVendu(long noArticle, String nomArticle, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres, int prixInitial, int prixVente) {
+    public ArticleVendu(long noArticle, String nomArticle, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres, int prixInitial, int prixVente, Integer etatVente, Retrait lieuRetrait, Utilisateur utilisateur, Categorie categorie, List<Enchere> lstEncheres) {
         this.noArticle = noArticle;
         this.nomArticle = nomArticle;
         this.description = description;
@@ -42,6 +49,25 @@ public class ArticleVendu {
         this.dateFinEncheres = dateFinEncheres;
         this.prixInitial = prixInitial;
         this.prixVente = prixVente;
+        this.etatVente = etatVente;
+        this.lieuRetrait = lieuRetrait;
+        this.utilisateur = utilisateur;
+        this.categorie = categorie;
+        this.lstEncheres = lstEncheres;
+    }
+
+    public ArticleVendu(String nomArticle, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres, int prixInitial, int prixVente, Integer etatVente, Retrait lieuRetrait, Utilisateur utilisateur, Categorie categorie, List<Enchere> lstEncheres) {
+        this.nomArticle = nomArticle;
+        this.description = description;
+        this.dateDebutEncheres = dateDebutEncheres;
+        this.dateFinEncheres = dateFinEncheres;
+        this.prixInitial = prixInitial;
+        this.prixVente = prixVente;
+        this.etatVente = etatVente;
+        this.lieuRetrait = lieuRetrait;
+        this.utilisateur = utilisateur;
+        this.categorie = categorie;
+        this.lstEncheres = lstEncheres;
     }
 
     public long getNoArticle() {
@@ -68,6 +94,17 @@ public class ArticleVendu {
         this.description = description;
     }
 
+    public String getDateDebutEncheresFormatee() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return this.dateDebutEncheres.format(formatter);
+    }
+
+
+    public String getDateFinEncheresFormatee() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return this.dateFinEncheres.format(formatter);
+    }
+
     public LocalDate getDateDebutEncheres() {
         return dateDebutEncheres;
     }
@@ -82,6 +119,16 @@ public class ArticleVendu {
 
     public void setDateFinEncheres(LocalDate dateFinEncheres) {
         this.dateFinEncheres = dateFinEncheres;
+    }
+
+    public Long getCalendrierEnchere(LocalDate dateDebutEnchere, LocalDate dateFinEnchere) {
+        LocalDate today = LocalDate.now();
+        if (dateDebutEnchere.isAfter(today)){
+            return ChronoUnit.DAYS.between(today, dateDebutEnchere);
+        }
+        else {
+            return ChronoUnit.DAYS.between(today, dateFinEnchere);
+        }
     }
 
     public int getPrixInitial() {
@@ -132,11 +179,11 @@ public class ArticleVendu {
         this.lstEncheres = lstEncheres;
     }
 
-    public String getEtatVente() {
+    public Integer getEtatVente() {
         return etatVente;
     }
 
-    public void setEtatVente(String etatVente) {
+    public void setEtatVente(Integer etatVente) {
         this.etatVente = etatVente;
     }
 

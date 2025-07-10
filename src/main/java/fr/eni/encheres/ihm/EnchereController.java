@@ -43,7 +43,7 @@ public class EnchereController {
     @GetMapping("/listEnchereU")
     public String displayListEnchereUser(@RequestParam(name = "idUser" ) Long id, Model model) {
 
-                List<Enchere> encheresU = eService.findByUser(id);
+        List<Enchere> encheresU = eService.findByUser(id);
         model.addAttribute("userEnchere", encheresU);
         return "details_enchere_util";
     }

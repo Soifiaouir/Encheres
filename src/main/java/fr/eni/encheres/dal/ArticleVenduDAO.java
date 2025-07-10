@@ -22,4 +22,7 @@ public interface ArticleVenduDAO {
     int findPrixEnchere (long noArticle);
 
     List<ArticleVendu> getListArticlesVenduByUtilisateur(Utilisateur utilisateur);
+
+    List<ArticleVendu> getListArticlesVenduByUtilisateurAndEtatvente(Utilisateur utilisateur, Integer etatvente);
+
 }

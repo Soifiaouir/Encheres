@@ -15,9 +15,9 @@ import java.sql.SQLException;
 
 @Repository
 public class RetraitDAOImpl implements RetraitDAO {
-    private final String CREATE_RETRAIT = "INSERT INTO RETRAITS (NO_ARTICLE, RUE, CODE_POSTALE, VILLE) VALUES (:no_article, :rue, :code_postale, :ville";
-    private final String SELECT_BY_ARTICLE = "SELECT NO_ARTICLE, RUE, CODE_POSTALE, VILLE FROM RETRAITS WHERE NO_ARTICLE = :no_article";
-    private final String UPDATE_RETRAIT ="UPDATE RETRAITS SET RUE =:rue, CODE_POSTALE = :codePostale," +
+    private final String CREATE_RETRAIT = "INSERT INTO RETRAITS (NO_ARTICLE, RUE, CODE_POSTAL, VILLE) VALUES (:no_article, :rue, :code_postal, :ville";
+    private final String SELECT_BY_ARTICLE = "SELECT NO_ARTICLE, RUE, CODE_POSTAL, VILLE FROM RETRAITS WHERE NO_ARTICLE = :no_article";
+    private final String UPDATE_RETRAIT ="UPDATE RETRAITS SET RUE =:rue, CODE_POSTAL = :codePostal," +
             "VILLE = :ville WHERE NO_ARTICLE = :no_article ";
     private final String DELETE_RETRAIT ="DELETE FROM RETRAITS WHERE NO_ARTICLE = :no_article ";
 
@@ -40,7 +40,7 @@ public class RetraitDAOImpl implements RetraitDAO {
     public void createRetrait(Retrait retrait) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("rue", retrait.getRue());
-        params.addValue("code_postale", retrait.getCodePostal());
+        params.addValue("code_postal", retrait.getCodePostal());
         params.addValue("ville", retrait.getVille());
         params.addValue("no_article", retrait.getArticleVendu().getNoArticle());
 
@@ -51,7 +51,7 @@ public class RetraitDAOImpl implements RetraitDAO {
     public void updateRetrait(Retrait retrait) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("rue", retrait.getRue());
-        params.addValue("code_postale", retrait.getCodePostal());
+        params.addValue("code_postal", retrait.getCodePostal());
         params.addValue("ville", retrait.getVille());
         params.addValue("no_article", retrait.getArticleVendu().getNoArticle());
 
@@ -79,7 +79,7 @@ public class RetraitDAOImpl implements RetraitDAO {
             r.setArticleVendu(article);
 
             r.setRue(rs.getString("RUE"));
-            r.setCodePostal(rs.getString("CODE_POSTALE"));
+            r.setCodePostal(rs.getString("CODE_POSTAL"));
             r.setVille(rs.getString("VILLE"));
 
             return r;

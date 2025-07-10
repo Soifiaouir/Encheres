@@ -1,78 +1,269 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>NOUVELLE VENTE</title>
-    <link rel="stylesheet" th:href="@{/css/formulaire-objet-temporaire.css}">
-</head>
-<body>
-<nav>
-    <td data-th-text="${'salut  ' + utilisateurEnSession.pseudo}"></td>
-</nav>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      th:replace="~{
+                    layouts/layout :: layout-enchere(
+					titrePage='Modifier un article',
+					contenuPage=~{:: main},
+					ressourcesSupp=~{})
+					}">
 
-    <main>
-        <form data-th-action="@{/fiche_article}"
+<main class="min-h-[100vh] bg-neutral-300 py-4 flex flex-col mt-20">
+    <h1 th:text="#{maj-article.view.h1}"
+        class="text-4xl font-medium mb-10 text-center text-neutral-900"></h1>
+
+<data-th-block data-th-if="${articleVendu.etatVente < 2}">
+        <div class="w-full px-5 mt-auto grid grid-cols-8" >
+            <section class="lg:col-start-4 lg:col-end-6 col-span-8">
+                <form  data-th-action="@{/creer_article}"
+                       data-th-object="${articleVendu}"
+                       method="post">
+
+                    <div class="w-full relative mb-4">
+                        <div class="absolute top-0 -translate-y-3 ps-5">
+                            <label class="font-medium text-sm text-neutral-600 bg-neutral-300 px-2"
+                                   th:text="#{article.form.label-name}"
+                                   for="idNom"></label>
+                        </div>
+                        <input class="border rounded-lg w-full px-2 py-1 pt-1.5" id="idNom" type="text"
+                               th:placeholder="#{article.form.placeholder-name}"
+                               data-th-field="*{nomArticle}" required />
+                        <div data-th-replace="~{fragments/error/fragment-error :: frag-error('nomArticle')}"></div>
+                    </div>
+                    <div class="w-full relative mb-4">
+                        <div class="absolute top-0 -translate-y-3 ps-5">
+                            <label class="font-medium text-sm text-neutral-600 bg-neutral-300 px-2"
+                                   th:text="#{article.form.label-description}"
+                                   for="idDescription"></label>
+                        </div>
+                        <input class="border rounded-lg w-full px-2 py-1 pt-1.5"
+                               id="idDescription"
+                               type="text"
+                               th:placeholder="#{article.form.placeholder-desc}"
+                               data-th-field="*{description}" />
+                    </div>
+                    <div class="w-full relative mb-4">
+                        <div class="absolute top-0 -translate-y-3 ps-5">
+                            <label class="font-medium text-sm text-neutral-600 bg-neutral-300 px-2"
+                                   th:text="#{article.form.label-categorie}"
+                                   for="idCategorie"></label>
+                        </div>
+                        <select class="border rounded-lg w-full px-2 py-1 pt-1.5"
+                                id="idCategorie"
+                                data-th-field="*{categorie.noCategorie}" >
+                            <option data-th-each="item : ${categorieList}"
+                                    data-th-text="${item.libelle}"
+                                    data-th-value="${item.noCategorie}"></option>
+                            <div data-th-replace="~{fragments/error/fragment-error :: frag-error('Categorie')}"></div>
+                        </select>
+                    </div>
+                    <label class="font-medium text-sm text-neutral-600 bg-neutral-300 px-2"
+                           th:text="#{article.form.label-miseaprix}"
+                           for="idMiseaprix"></label>
+                    <input class="border rounded-lg w-full px-2 py-1 pt-1.5"
+                           id="idMiseaprix"
+                           placeholder="0"
+                           type="number"
+                           min="1"
+                           data-th-field="*{prixInitial}" required />
+                    <label class="font-medium text-sm text-neutral-600 bg-neutral-300 px-2"
+                           th:text="#{article.form.label-debutenchere}"
+                           for="idDebutEnchere">  : </label>
+                    <input class="border rounded-lg w-full px-2 py-1 pt-1.5"
+                           id="idDebutEnchere"
+                           type="date"
+                           data-th-min="${today}"
+                           data-th-field="*{dateDebutEncheres}" required/>
+                    <div data-th-replace="~{fragments/error/fragment-error :: frag-error('dateDebutEncheres')}"></div>
+                    <label class="font-medium text-sm text-neutral-600 bg-neutral-300 px-2"
+                           th:text="#{article.form.label-finenchere}"
+                           for="idFinEnchere"></label>
+                    <input class="border rounded-lg w-full px-2 py-1 pt-1.5" id="idFinEnchere"
+                           type="date"
+                           data-th-min="${today}"
+                           data-th-field="*{dateFinEncheres}" required />
+                    <div data-th-replace="~{fragments/error/fragment-error :: frag-error('dateFinEncheres')}"></div>
+                    <br /><br />
+
+
+                    <h2 class="text-neutral-900 ms-5 font-bold hover:scale-110 p-2 pb-1.5" >Retrait </h2>
+
+                    <label class="font-medium text-sm text-neutral-600 bg-neutral-300 px-2"
+                           th:text="#{article.form.label-rue}"
+                           for="idRetraitRue"></label>
+                    <input class="border rounded-lg w-full px-2 py-1 pt-1.5"
+                           id="idRetraitRue"
+                           type="text"
+                           data-th-placeholder="${userSession.rue}"
+                           th:field="*{lieuRetrait.rue}" /></li>
+                    <label class="font-medium text-sm text-neutral-600 bg-neutral-300 px-2"
+                           th:text="#{article.form.label-cp}"
+                           for="idRetraitCP"></label>
+                    <input class="border rounded-lg w-full px-2 py-1 pt-1.5"
+                           id="idRetraitCP" type="number"
+                           data-th-placeholder="${userSession.codePostal}"
+                           th:field="*{lieuRetrait.codePostal}" />
+                    <label class="font-medium text-sm text-neutral-600 bg-neutral-300 px-2"
+                           th:text="#{article.form.label-ville}"
+                           for="idRetraitVille"></label>
+                    <input class="border rounded-lg w-full px-2 py-1 pt-1.5"
+                           id="idRetraitVille"
+                           type="text"
+                           data-th-placeholder="${userSession.ville}" th:field="*{lieuRetrait.ville}" />
+                    <div class="text-sm mb-8">
+                        <br/>
+                        <button class="bg-lime-200 w-full py-2 pb-1.5 hover:scale-110 font-semibold rounded-lg mb-5"
+                                th:text="#{article.register}"
+                                type="submit"></button>
+                        <br/>
+                        <button class="bg-neutral-900 text-neutral-300 hover:scale-110 py-2 pb-1.5 font-medium rounded-lg w-full block mb-4"
+                                type="reset"
+                                th:text="#{article.reset}"></button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </data-th-block>
+
+<data-th-block data-th-if="${articleVendu.etatVente > 1}">
+        <form data-th-action="@{/maj_article}"
               method ="post"
               data-th-object="${articleVendu}" >
             <ul>
-                <input data-th-value="*{noArticle}" data-th-field="*{noArticle}" hidden>
+                <li><input data-th-value="*{noArticle}" data-th-field="*{noArticle}" hidden />
+
                 <li>
-                    <label for="idNom">Article : </label>
-                    <input id="idNom" type="text" data-th-field="*{nomArticle}" />
-                </li>
-                <li>
-                    <label for="idDescription">Description : </label>
-                    <input id="idDescription" type="text" data-th-value="*{description}" data-th-field="*{description}" />
-                </li>
-                <li>
-                    <label for="idCategorie">Categorie : </label>
-                    <select id="idCategorie" data-th-field="*{categorie.noCategorie}" >
-                        <option data-th-each="item : ${categorieList}"
-                                data-th-text="${item.libelle}"
-                                data-th-value="${item.noCategorie}"></option>
-                    </select>
-                </li>
-                <li>
-                    <label for="idPhoto"> photo de l'article : </label>
-                    <input id="idPhoto" type="image" data-th-field="${'EN CONSTRUCTION'}" />
-                </li>
-                <li>
-                    <label for="idMiseaprix"> Mise à prix : </label>
-                    <input id="idMiseaprix" type="number" min="1" data-th-field="*{prixInitial}" />
-                </li>
-                <li>
-                    <label for="idDebutEnchere"> Début de l'enchère : </label>
-                    <input id="idDebutEnchere" type="date"  data-th-value="*{dateDebutEncheres}" data-th-field="*{dateDebutEncheres}" />
-                </li>
-                <li>
-                    <label for="idFinEnchere"> Fin de l'enchère : </label>
-                    <input id="idFinEnchere" type="date"  data-th-value="*{dateDebutEncheres}" data-th-field="*{dateFinEncheres}" />
+                    <label for="idNom2" >Article : </label>
+                    <th data-th-text="*{nomArticle}"></th>
+                    <input id="idNom2" type="text" placeholder="Objet" data-th-field="*{nomArticle}" hidden />
                 </li>
 
-                <ul>Retrait (A FAIRE)
-               <!--     <li>
-                        <label for="idRetraitRue"> Rue : </label>
-                        <input id="idRetraitRue" type="text" data-th-value="*{lieuRetrait.rue}" readonly/></li>
+                <data-th-block data-th-if="*{etatVente >= 3}">
                     <li>
-                        <label for="idRetraitCP"> Code Postal : </label>
-                        <input id="idRetraitCP" type="text" data-th-value="*{lieuRetrait.codePostal}" readonly/>
+                    <label> Description : </label>
+                    <th data-th-text="*{description}"></th>
+                    </li>
+                </data-th-block>
+
+                <data-th-block data-th-if="*{etatVente > 2}">
+                    <li>
+                    <label >Categorie : </label>
+                    <input type="text" class="readonly" data-th-field="*{categorie.libelle}" readonly />
+                    </li>
+                </data-th-block>
+
+                    <li>
+                        <label for="idMiseaprix2"> Mise à prix : </label>
+                        <input class="readonly" id="idMiseaprix2" type="number" min="1" data-th-field="*{prixInitial}" readonly/>
                     </li>
                     <li>
-                        <label for="idRetraitVille"> Ville : </label>
-                        <input id="idRetraitVille" type="text" data-th-value="*{lieuRetrait.ville}" readonly/>
-                    </li> -->
-                </ul>
+                        <label for="idPrixVente"> Dernière Enchère : </label>
+                        <input class="readonly" id="idPrixVente" type="number" data-th-field="*{prixVente}" readonly />
+                    </li>
+
+
+                <data-th-block data-th-if="*{etatVente < 2}">
+            <!--    <li>
+                    <label for="idDebutEnchere"> Début de l'enchère : </label>
+                    <th th:text="*{getDateDebutEncheresFormatee() + '    '}"></th>
+                    <input id="idDebutEnchere" type="text" data-th-min="${today}" th:value="${{articleVendu.dateDebutEncheres}}" th:field="*{dateDebutEncheres}" required />
+                </li> -->
+           <!--     <li>
+                    <label for="idFinEnchere"> Fin de l'enchère : </label>
+                    <th th:text="*{getDateFinEncheresFormatee()}"></th>
+                    <input id="idFinEnchere" type="text" data-th-min="${today}" data-th-field="*{dateFinEncheres}" data-th-value="*{dateFinEncheres}" required />
+                </li> -->
+                    <li>
+                        <th data-th-text="${joursAvantEnchere + ' jours avant le début des enchères'}" ></th>
+                    </li>
+                </data-th-block>
+
+                <data-th-block data-th-if="*{etatVente > 1}">
+                    <li>
+                        <label for="idDebutEnchere2"> Début de l'enchère : </label>
+                        <th th:text="*{getDateDebutEncheresFormatee()}"></th>
+                        <input class="readonly" id="idDebutEnchere2" type="text" data-th-value="*{dateDebutEncheres}" data-th-field="*{dateDebutEncheres}" hidden />
+                    </li>
+
+                    <li>
+                        <label for="idFinEnchere2"> Fin de l'enchère : </label>
+                        <th th:text="*{getDateFinEncheresFormatee()}"></th>
+                        <input class="readonly" id="idFinEnchere2" type="text" data-th-value="*{dateFinEncheres}" data-th-field="*{dateFinEncheres}" hidden/>
+                    </li>
+                    <data-th-block data-th-if="*{etatVente == 2}">
+                    <li>
+                        <th data-th-text="${joursAvantEnchere + ' jours avant la fin des enchères'}" ></th>
+                    </li>
+                    </data-th-block>
+                    <data-th-block data-th-if="*{etatVente == 3}">
+                        <li>
+                            <th data-th-text="${'ENCHERES TERMINÉES'}" ></th>
+                        </li>
+                    </data-th-block>
+
+                </data-th-block>
+
+
+    <h2>METTRE A JOUR : </h2>
+
+    <data-th-block data-th-if="*{etatVente == 2}">
+        <li>
+            <label for="idDescription2"> Mettre à jour la Description : </label>
+            <input id="idDescription2" type="text" data-th-value="*{description}" data-th-field="*{description}"/>
+        </li>
+    <label for="idCategorie2">Categories : </label>
+    <select id="idCategorie2" data-th-field="*{categorie}" >
+        <option data-th-each="item : ${categorieList}"
+                data-th-text="${item.libelle}"
+                data-th-value="${item.noCategorie}"></option>
+    </select>
+    </data-th-block>
 
                 <li class="bouton">
                     <a href="/list_articles">Annuler</a>
-                    <button type="reset">Remettre à zéro</button>
+                    <data-th-block data-th-if="*{etatVente < 3}">
                     <button type="submit">Enregistrer</button>
+                    </data-th-block>
                 </li>
-
             </ul>
+    <h2 class="text-neutral-900 ms-5 font-bold hover:scale-110 p-2 pb-1.5" >Retrait </h2>
 
+    <label class="font-medium text-sm text-neutral-600 bg-neutral-300 px-2"
+           th:text="#{article.form.label-rue}"
+           for="idRetraitRue2"></label>
+    <input class="border rounded-lg w-full px-2 py-1 pt-1.5"
+           id="idRetraitRue2"
+           type="text"
+           data-th-placeholder="${userSession.rue}"
+           th:field="*{lieuRetrait.rue}" /></li>
+    <label class="font-medium text-sm text-neutral-600 bg-neutral-300 px-2"
+           th:text="#{article.form.label-cp}"
+           for="idRetraitCP2"></label>
+    <input class="border rounded-lg w-full px-2 py-1 pt-1.5"
+           id="idRetraitCP2" type="number"
+           data-th-placeholder="${userSession.codePostal}"
+           th:field="*{lieuRetrait.codePostal}" />
+    <label class="font-medium text-sm text-neutral-600 bg-neutral-300 px-2"
+           th:text="#{article.form.label-ville}"
+           for="idRetraitVille2"></label>
+    <input class="border rounded-lg w-full px-2 py-1 pt-1.5"
+           id="idRetraitVille2"
+           type="text"
+           data-th-placeholder="${userSession.ville}" th:field="*{lieuRetrait.ville}" />
+    <div class="text-sm mb-8">
+        <br/>
+        <button class="bg-lime-200 w-full py-2 pb-1.5 hover:scale-110 font-semibold rounded-lg mb-5"
+                th:text="#{article.register}"
+                type="submit"></button>
+        <br/>
+        <button class="bg-neutral-900 text-neutral-300 hover:scale-110 py-2 pb-1.5 font-medium rounded-lg w-full block mb-4"
+                type="reset"
+                th:text="#{article.reset}"></button>
+    </div>
         </form>
+</data-th-block>
+</main>
 
-    </main>
 </body>
 </html>

@@ -3,6 +3,7 @@ package fr.eni.encheres.bll;
 import fr.eni.encheres.bo.ArticleVendu;
 import fr.eni.encheres.bo.Utilisateur;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ArticleVenduService {
@@ -11,9 +12,11 @@ public interface ArticleVenduService {
 
     ArticleVendu getArticleVenduByNoArticle(long noArticle);
 
+    List<ArticleVendu> getLstArticleVendusbyUtilisateurAndEtatvente(Utilisateur utilisateur, Integer etatvente);
+
     List<ArticleVendu> getLstArticleVendusbyUtilisateur(Utilisateur utilisateur);
 
-    String etatEnchere(ArticleVendu articleVendu);
+    Integer etatEnchere(ArticleVendu articleVendu);
 
     void createArticleVendu(ArticleVendu articleVendu);
 
@@ -23,4 +26,5 @@ public interface ArticleVenduService {
 
     String getNameArticleVendu(long noArticle);
 
+    Long getCalendrierEnchere(LocalDate dateDebutEnchere, LocalDate dateFinEnchere);
 }

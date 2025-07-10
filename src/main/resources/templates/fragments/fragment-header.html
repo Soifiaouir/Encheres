@@ -47,10 +47,15 @@
                                       class="font-bold"></span>
                         <img src="/img/money-neutral-sm.png" width="20" alt="credit">
                     </a>
-                    <div class="ms-3 transition duration-400 btn bg-neutral-900 hover:bg-neutral-700 hover:scale-110 text-neutral-300 lg:px-5 p-2 pb-1.5 font-bold rounded-sm">
-                            <span th:text="#{nav.a.vendre}"
-                                  class="font-bold pt-0.5"></span>
+                    <div  class="ms-3 transition duration-400 btn bg-neutral-900 hover:bg-neutral-700 hover:scale-110 text-neutral-300 lg:px-5 p-2 pb-1.5 font-bold rounded-sm">
+                     <a href="/creer_article">   <span th:text="#{nav.a.vendre}"
+                                  class="font-bold pt-0.5"></span></a>
                     </div>
+                    <div  class="ms-3 transition duration-400 btn bg-neutral-900 hover:bg-neutral-700 hover:scale-110 text-neutral-300 lg:px-5 p-2 pb-1.5 font-bold rounded-sm">
+                        <a href="/list_articles">   <span th:text="#{nav.a.encheres}"
+                                                          class="font-bold pt-0.5"></span></a>
+                    </div>
+
                     <a th:text="#{nav.a.index}"
                        th:href="@{/accueil}"
                        class="transition duration-400 text-neutral-900 ms-5 font-bold hover:scale-110 p-2 pb-1.5"></a>

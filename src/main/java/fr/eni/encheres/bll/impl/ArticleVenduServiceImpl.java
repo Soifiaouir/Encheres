@@ -4,9 +4,11 @@ import fr.eni.encheres.bll.ArticleVenduService;
 import fr.eni.encheres.bo.*;
 import fr.eni.encheres.exception.BusinessException;
 import fr.eni.encheres.dal.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 
@@ -23,7 +25,7 @@ public class ArticleVenduServiceImpl implements ArticleVenduService {
 
     private RetraitDAO retraitDAO;
 
-
+    @Autowired
     public ArticleVenduServiceImpl(ArticleVenduDAO articleVenduDAO) {
         this.articleVenduDAO = articleVenduDAO;
     }
@@ -46,12 +48,23 @@ public class ArticleVenduServiceImpl implements ArticleVenduService {
         return lstArticlesVendus;
     }
 
-    /** Method used to get the list of articles selled by someone
+    /** Method used to get the list of articles selled by someone et by the state of the auction
      *
      * @param utilisateur
      * @return list
      */
 
+    @Override
+    public List<ArticleVendu> getLstArticleVendusbyUtilisateurAndEtatvente(Utilisateur utilisateur, Integer etatvente) {
+        List<ArticleVendu> lstArticlesVendus = articleVenduDAO.getListArticlesVenduByUtilisateurAndEtatvente(utilisateur, etatvente);
+        return lstArticlesVendus;
+    }
+
+    /** Method used to get the list of articles selled by someone
+     *
+     * @param utilisateur
+     * @return list
+     */
 
     @Override
     public List<ArticleVendu> getLstArticleVendusbyUtilisateur(Utilisateur utilisateur) {
@@ -102,26 +115,30 @@ public class ArticleVenduServiceImpl implements ArticleVenduService {
     /** Method used to know what is the state of the auction (begun, ended, not already began)
      *
      * @param articleVendu
-     * @return a String with the actual state of the auction.
+     * @return a number that returns the state of the auction (0 : problems, 1 : not alreadybegan, 2, begun, 3, ended.)
      */
 
     @Override
-    public String etatEnchere(ArticleVendu articleVendu){
+    public Integer etatEnchere(ArticleVendu articleVendu){
         LocalDate dateDebut = articleVendu.getDateDebutEncheres();
         LocalDate dateFin = articleVendu.getDateFinEncheres();
         LocalDate today = LocalDate.now();
         if (dateDebut != null && dateFin != null){
             if (today.isBefore(dateDebut)) {
-                return "l'enchère n'a pas commencée";
+                return 1;
             }
             if (today.isAfter(dateFin)) {
-                return "l'enchère est finie";
+                return 3;
             }
-            else return "l'enchère est en cours";
+            else return 2;
         }
-        return "erreur de la mise en enchère";
+        return 0;
     }
 
+    /** Method used to create a new article
+     *
+     * @param articleVendu
+     */
 
     @Override
     public void createArticleVendu(ArticleVendu articleVendu) {
@@ -131,10 +148,20 @@ public class ArticleVenduServiceImpl implements ArticleVenduService {
         articleVenduDAO.createArticle(articleVendu);
     }
 
+    /** Method used to update an Article
+     *
+     * @param articleVendu
+     */
+
     @Override
     public void updateArticleVendu(ArticleVendu articleVendu) {
         articleVenduDAO.updateArticle(articleVendu);
     }
+
+    /** Method used to delete an Article
+     *
+     * @param articleVendu
+     */
 
     @Override
     public void deleteArticleVendu(ArticleVendu articleVendu) {
@@ -142,10 +169,31 @@ public class ArticleVenduServiceImpl implements ArticleVenduService {
         articleVenduDAO.removeArticle(noArticle);
     }
 
+    /** Method used to get the name of an article
+     *
+     * @param noArticle
+     * @return a String with the name of the Article
+     */
+
     @Override
     public String getNameArticleVendu(long noArticle) {
         return articleVenduDAO.findNomArticle(noArticle);
     }
 
-
+    /**
+     * Method used to get the date before an auction
+     *
+     * @param dateDebutEnchere
+     * @return
+     */
+    @Override
+    public Long getCalendrierEnchere(LocalDate dateDebutEnchere, LocalDate dateFinEnchere) {
+        LocalDate today = LocalDate.now();
+        if (dateDebutEnchere.isAfter(today)){
+            return ChronoUnit.DAYS.between(today, dateDebutEnchere);
+        }
+        else {
+            return ChronoUnit.DAYS.between(today, dateFinEnchere);
+        }
+    }
 }

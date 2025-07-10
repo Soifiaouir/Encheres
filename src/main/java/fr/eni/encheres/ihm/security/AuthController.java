@@ -32,7 +32,10 @@ public class AuthController {
 
     @ModelAttribute("userSession")
     public Utilisateur userSession() {
-        return new Utilisateur();
+        //Utilisateur utilisateur = service.findUtilisateurById(1);
+        Utilisateur utilisateur = new Utilisateur();
+
+        return utilisateur;
     }
 
     @GetMapping("/login")

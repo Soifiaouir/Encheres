@@ -42,6 +42,7 @@ public class EnchereSecurityConfig {
             auth
 //                    .requestMatchers(HttpMethod.GET,"/profil/*").authenticated()
 //                    .requestMatchers(HttpMethod.POST,"/profil/*").authenticated()
+                    .requestMatchers(HttpMethod.GET, "/list_articles").permitAll()
                     .requestMatchers(HttpMethod.GET, "/credit").authenticated()
                     .requestMatchers(HttpMethod.GET,"/signin").permitAll()
                     .requestMatchers(HttpMethod.POST,"/signin").permitAll()

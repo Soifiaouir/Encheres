@@ -22,21 +22,39 @@ import java.util.List;
 @Repository
 public class ArticleVenduDAOImpl implements ArticleVenduDAO {
 
-     private final String FIND_BY_NUMBER = "SELECT no_article, nom_article, description, date_debut_encheres, " +
-             "date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie FROM articles_vendus " +
-             "WHERE no_article = :noArticle";
+
+    private final String FIND_BY_NUMBER = "SELECT a.no_article, a. nom_article, a.description, a.date_debut_encheres, " +
+             "a.date_fin_encheres, a.prix_initial, a.prix_vente, a.etat_vente, a.no_categorie, " +
+             "c.no_categorie, c.libelle, u.no_utilisateur, u.nom, u.prenom, u.pseudo, u.rue, u.code_postal, u.ville, r.rue, r.code_postal, r.ville " +
+             "FROM articles_vendus a LEFT JOIN UTILISATEURS u ON a.no_utilisateur = u.no_utilisateur " +
+             "LEFT JOIN CATEGORIES c on c.no_categorie = a.no_categorie " +
+            "LEFT JOIN RETRAITS r on a.no_article = r.no_article " +
+             "WHERE a.no_article = :noArticle";
 
      private final String FIND_ALL = "SELECT no_article, nom_article, description, date_debut_encheres, " +
-             "date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie FROM articles_vendus ";
+             "date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie, etat_vente FROM articles_vendus ";
 
-     private final String FIND_BY_UTILISATEUR = "SELECT no_article, nom_article, description, date_debut_encheres, " +
-             "date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie FROM articles_vendus where no_utilisateur = :noUtilisateur";
+    private final String FIND_BY_UTILISATEUR = "SELECT a.no_article, a.nom_article, a.description, a.date_debut_encheres, " +
+            "a.date_fin_encheres, a.prix_initial, a.prix_vente, a.etat_vente," +
+            "c.no_categorie, c.libelle, u.no_utilisateur, u.nom, u.prenom, u.pseudo, u.rue, u.code_postal, u.ville, r.rue, r.code_postal, r.ville " +
+             "FROM articles_vendus a LEFT JOIN UTILISATEURS u ON a.no_utilisateur = u.no_utilisateur " +
+            "LEFT JOIN CATEGORIES c on c.no_categorie = a.no_categorie " +
+            "LEFT JOIN RETRAITS r on a.no_article = r.no_article " +
+             "where a.no_utilisateur = :noUtilisateur";
 
-     private final String INSERT = "INSERT INTO articles_vendus(nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie) " +
-             "VALUES (:nomArticle, :description, :dateDebutEncheres, :dateFinEncheres, :prixInitial, :prixVente, :noUtilisateur, :noCategorie)";
+    private static final String FIND_BY_UTILISATEUR_ET_ETAT_VENTE = "SELECT a.no_article, a.nom_article, a.description, a.date_debut_encheres, " +
+            "a.date_fin_encheres, a.prix_initial, a.prix_vente, a.etat_vente," +
+            "c.no_categorie, c.libelle, u.no_utilisateur, u.nom, u.prenom, u.pseudo, u.rue, u.code_postal, u.ville, r.rue, r.code_postal, r.ville " +
+            "FROM articles_vendus a LEFT JOIN UTILISATEURS u ON a.no_utilisateur = u.no_utilisateur " +
+            "LEFT JOIN CATEGORIES c on c.no_categorie = a.no_categorie " +
+            "LEFT JOIN RETRAITS r on a.no_article = r.no_article " +
+            "where a.no_utilisateur = :noUtilisateur AND a.etat_vente = :etatVente";
+
+     private final String INSERT = "INSERT INTO articles_vendus(nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie, etat_vente) " +
+             "VALUES (:nomArticle, :description, :dateDebutEncheres, :dateFinEncheres, :prixInitial, :prixVente, :noUtilisateur, :noCategorie, :etatVente)";
 
      private final String UPDATE = "UPDATE articles_vendus SET nom_article = :nomArticle, description = :description, date_debut_encheres = :dateDebutEncheres, " +
-             "date_fin_encheres = :dateFinEncheres, prix_initial = :prixInitial, prix_vente = :prixVente, no_utilisateur = :noUtilisateur, no_categorie = :noCategorie "  +
+             "date_fin_encheres = :dateFinEncheres, prix_initial = :prixInitial, prix_vente = :prixVente, no_utilisateur = :noUtilisateur, no_categorie = :noCategorie, etat_vente = :etatVente "  +
              "WHERE no_article = :noArticle";
 
      private final String FIND_NOM = "SELECT nom FROM articles_vendus WHERE no_article = :noArticle";
@@ -64,8 +82,7 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
      public ArticleVendu getArticleVendu(long noArticle) {
           MapSqlParameterSource params = new MapSqlParameterSource();
           params.addValue("noArticle", noArticle);
-          return jdbcTemplate.queryForObject(FIND_BY_NUMBER, params,
-                  new BeanPropertyRowMapper<>(ArticleVendu.class));
+          return jdbcTemplate.queryForObject(FIND_BY_NUMBER, params, new ArticleMapper());
      }
 
      /** Method to create a new article
@@ -86,6 +103,7 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
           namedParameters.addValue("prixVente", articleVendu.getPrixVente());
           namedParameters.addValue("noUtilisateur", articleVendu.getUtilisateur().getNoUtilisateur());
           namedParameters.addValue("noCategorie", articleVendu.getCategorie().getNoCategorie());
+          namedParameters.addValue("etatVente", articleVendu.getEtatVente());
 
           jdbcTemplate.update(INSERT, namedParameters, keyHolder);
 
@@ -113,6 +131,7 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
           namedParameters.addValue("prixVente", articleVendu.getPrixVente());
           namedParameters.addValue("noUtilisateur", articleVendu.getUtilisateur().getNoUtilisateur());
           namedParameters.addValue("noCategorie", articleVendu.getCategorie().getNoCategorie());
+          namedParameters.addValue("etatVente", articleVendu.getEtatVente());
 
           jdbcTemplate.update(UPDATE, namedParameters);
 
@@ -153,7 +172,7 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
           MapSqlParameterSource params = new MapSqlParameterSource();
           params.addValue("noUtilisateur", noUtilisateur);
 
-          return jdbcTemplate.query(FIND_BY_UTILISATEUR, params, new BeanPropertyRowMapper<>(ArticleVendu.class));
+          return jdbcTemplate.query(FIND_BY_UTILISATEUR, params, new ArticleMapper());
      }
 
      /** Method used to get the name of an article
@@ -182,6 +201,55 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
           params.addValue("noArticle", noArticle);
 
           return jdbcTemplate.queryForObject(FIND_PRIX_VENTE, params, Integer.class);
+     }
+
+    @Override
+    public List<ArticleVendu> getListArticlesVenduByUtilisateurAndEtatvente(Utilisateur utilisateur, Integer etatvente) {
+        Long noUtilisateur = utilisateur.getNoUtilisateur();
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("noUtilisateur", noUtilisateur);
+        params.addValue("etatVente", etatvente);
+
+        return jdbcTemplate.query(FIND_BY_UTILISATEUR_ET_ETAT_VENTE, params, new ArticleMapper());
+    }
+
+    class ArticleMapper implements RowMapper<ArticleVendu> {
+          @Override
+          public ArticleVendu mapRow(ResultSet rs, int rowNum) throws SQLException {
+               ArticleVendu a = new ArticleVendu();
+               a.setNoArticle(rs.getLong("no_article"));
+               a.setNomArticle(rs.getString("nom_article"));
+               a.setDescription(rs.getString("description"));
+               a.setDateDebutEncheres(rs.getDate("date_debut_encheres").toLocalDate());
+               a.setDateFinEncheres(rs.getDate("date_fin_encheres").toLocalDate());
+               a.setPrixVente(rs.getInt("prix_vente"));
+               a.setPrixInitial(rs.getInt("prix_initial"));
+               a.setEtatVente(rs.getInt("etat_vente"));
+
+                  Utilisateur utilisateur = new Utilisateur();
+                  utilisateur.setNoUtilisateur(rs.getLong("no_utilisateur"));
+                  utilisateur.setNom(rs.getString("NOM"));
+                  utilisateur.setPrenom(rs.getString("PRENOM"));
+                  utilisateur.setPseudo(rs.getString("PSEUDO"));
+                  utilisateur.setRue(rs.getString("rue"));
+                  utilisateur.setCodePostal(rs.getString("code_postal"));
+                  utilisateur.setVille(rs.getString("ville"));
+                  a.setUtilisateur(utilisateur);
+
+                  Categorie categorie = new Categorie();
+                  categorie.setNoCategorie(rs.getLong("no_categorie"));
+                  categorie.setLibelle(rs.getString("libelle"));
+                  a.setCategorie(categorie);
+
+                  Retrait retrait = new Retrait();
+                  retrait.setRue(rs.getString("rue"));
+                  retrait.setCodePostal(rs.getString("code_postal"));
+                  retrait.setVille(rs.getString("ville"));
+                  a.setLieuRetrait(retrait);
+
+               return a;
+          }
+
      }
 
 
