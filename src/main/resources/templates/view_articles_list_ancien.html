@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+
+      th:replace="~{
+                    layouts/layout :: layout-enchere(
+					titrePage='liste des articles clients',
+					contenuPage=~{:: main},
+					ressourcesSupp=~{})
+					}">
+
+<main class="objet">
+    <h1 th:text="#{listarticle.view.h1}"
+        class="text-4xl font-medium mb-10 text-center text-neutral-900"></h1>
+
+    <h2><data-th-block data-th-if="${nmbArticles == 0}" data-th-text="${ 'Aucun article enregistré' }"></data-th-block>
+        <data-th-block data-th-if="${nmbArticles == 1}" data-th-text="${ 'Vous avez mis un seul article en vente' }"></data-th-block>
+        <data-th-block data-th-if="${nmbArticles > 1}" data-th-text="${ 'Vous avez ' + nmbArticles +' articles en ventes' }"></data-th-block>
+    </h2>
+
+    <data-table-block data-th-if="${nmbArticles > 0}">
+    <table>
+        <thead>
+        <tr>
+            <th>Objet</th>
+            <th>Prix Initial</th>
+            <th>Prix en Enchere</th>
+            <th>Nom Vendeur</th>
+            <th>Catégorie</th>
+            <th>Modifier</th>
+            <th>État enchères</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-th-each="item : ${articlesLst}">
+            <td data-th-text="${item.nomArticle}"></td>
+            <td data-th-text="${item.prixInitial}"></td>
+            <td data-th-text="${item.prixVente}"></td>
+            <td data-th-text="${item.utilisateur.prenom + ' ' + item.utilisateur.nom}"></td>
+            <td data-th-text="${item.categorie.libelle}"></td>
+            <data-th-block data-th-if="*{item.etatVente == 0 && item.etatVente=='null'}">
+                <td><a data-th-href="@{/maj_article(noArticle=${item.noArticle})}">CHANGEZ VOTRE ENCHERE</a></td>
+                <td>ENCHERE IMPOSSIBLE</td>
+            </data-th-block>
+           <data-th-block data-th-if="*{item.etatVente == 1}">
+                <td><a data-th-href="@{/maj_article(noArticle=${item.noArticle})}">MODIFIER</a></td>
+               <data-th-block data-th-if="${item.getCalendrierEnchere(item.dateDebutEncheres, item.dateFinEncheres) > 2}">
+                <td data-th-text="${'DÉBUTENT DANS ' + item.getCalendrierEnchere(item.dateDebutEncheres, item.dateFinEncheres) + ' JOURS'}" > </td>
+               </data-th-block>
+               <data-th-block data-th-if="${item.getCalendrierEnchere(item.dateDebutEncheres, item.dateFinEncheres) == 1 }">
+                   <td data-th-text="${'DÉBUTENT DANS ' + item.getCalendrierEnchere(item.dateDebutEncheres, item.dateFinEncheres) + ' JOUR'}" > </td>
+               </data-th-block>
+           </data-th-block>
+            <data-th-block data-th-if="*{item.etatVente == 2}">
+                <td><a data-th-href="@{/maj_article(noArticle=${item.noArticle})}">METTRE À JOUR</a></td>
+                <data-th-block data-th-if="${item.getCalendrierEnchere(item.dateDebutEncheres, item.dateFinEncheres) > 2}">
+                <td data-th-text="${'FINISSENT DANS ' + item.getCalendrierEnchere(item.dateDebutEncheres, item.dateFinEncheres) + ' JOURS'}" > </td>
+                </data-th-block>
+                <data-th-block data-th-if="${item.getCalendrierEnchere(item.dateDebutEncheres, item.dateFinEncheres) == 1}">
+                    <td data-th-text="${'FINISSENT DANS 1 JOUR'}" > </td>
+                </data-th-block>
+
+            </data-th-block>
+        </tr>
+        </tbody>
+            </table>
+        </data-table-block>
+
+    <ul>
+        <li class="bouton">
+        <a href="/creer_article">Créer une nouvelle vente</a>
+        </li>
+    </ul>
+
+    <h2>
+        <br />
+        <br />
+        <data-th-block data-th-if="${nmbArchives == 0}" data-th-text="${ 'Aucune enchère enregistrée' }"></data-th-block>
+        <data-th-block data-th-if="${nmbArchives == 1}" data-th-text="${ 'Vous avez vendu un seul article par le passé' }"></data-th-block>
+        <data-th-block data-th-if="${nmbArchives > 1}" data-th-text="${ 'Vous avez ' + nmbArchives +' articles archivés' }"></data-th-block>
+    </h2>
+
+    <data-table-block data-th-if="${nmbArchives > 0}">
+        <table>
+            <thead>
+            <tr>
+                <th>Objet</th>
+                <th>Prix Initial</th>
+                <th>Prix en Enchere</th>
+                <th>Nom Vendeur</th>
+                <th>Catégorie</th>
+                <th>Voir Archive</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-th-each="item : ${archiveLst}">
+                <td data-th-text="${item.nomArticle}"></td>
+                <td data-th-text="${item.prixInitial}"></td>
+                <td data-th-text="${item.prixVente}"></td>
+                <td data-th-text="${item.utilisateur.prenom + ' ' + item.utilisateur.nom}"></td>
+                <td data-th-text="${item.categorie.libelle}"></td>
+                    <td><a data-th-href="@{/maj_article(noArticle=${item.noArticle})}">ARCHIVE</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </data-table-block>
+
+
+</main>
+</body>
+</html>

@@ -6,9 +6,7 @@ import fr.eni.encheres.bll.RetraitService;
 import fr.eni.encheres.bll.UtilisateurService;
 import fr.eni.encheres.bo.ArticleVendu;
 import fr.eni.encheres.bo.Categorie;
-import fr.eni.encheres.bo.Retrait;
 import fr.eni.encheres.exception.BusinessException;
-import fr.eni.encheres.ihm.converter.CategorieConverter;
 import fr.eni.encheres.bo.Utilisateur;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -16,10 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.desktop.UserSessionEvent;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @SessionAttributes({"userSession"})
@@ -49,30 +44,58 @@ public class VenteController {
      * @return
      */
 
+    @GetMapping("/list_articles_onstay")
+    public String pagesListesArticlesAvendre(@ModelAttribute("userSession") Utilisateur utilisateur, Model model) {
+
+        List<ArticleVendu> listAvendre = articleVenduService.getLstArticleVendusbyUtilisateurAndEtatvente(utilisateur, 1);
+
+        model.addAttribute("articlesLst", listAvendre);
+
+        /** Method used to know how many articles the user has got on each lists
+         *
+         */
+        return "view_articles_onstay_list";
+    }
+
+    @GetMapping("/list_articles_on_sells")
+    public String pagesListesArticlesEncours(@ModelAttribute("userSession") Utilisateur utilisateur, Model model) {
+
+        List<ArticleVendu> listEnCours = articleVenduService.getLstArticleVendusbyUtilisateurAndEtatvente(utilisateur, 2);
+
+        model.addAttribute("articlesLst", listEnCours);
+
+        /** Method used to know how many articles the user has got on each lists
+         *
+         */
+        return "view_articles_on_sells_list";
+
+    }
+
+    @GetMapping("/list_articles_archive")
+    public String pagesListesArticlesVendus(@ModelAttribute("userSession") Utilisateur utilisateur, Model model) {
+
+        List<ArticleVendu> listVendus = articleVenduService.getLstArticleVendusbyUtilisateurAndEtatvente(utilisateur, 3);
+
+        model.addAttribute("articlesLst", listVendus);
+
+        /** Method used to know how many articles the user has got on each lists
+         *
+         */
+        return "view_articles_archive_list";
+
+    }
+
     @GetMapping("/list_articles")
     public String pagesListesArticles(@ModelAttribute("userSession") Utilisateur utilisateur, Model model) {
 
         /** We separe different lists to show
          *
          */
+        List<ArticleVendu> list = articleVenduService.getLstArticleVendusbyUtilisateur(utilisateur);
+        model.addAttribute("articlesLst", list);
 
-        List<ArticleVendu> listAvendre = articleVenduService.getLstArticleVendusbyUtilisateurAndEtatvente(utilisateur, 1);
-        List<ArticleVendu> listActuelle = articleVenduService.getLstArticleVendusbyUtilisateurAndEtatvente(utilisateur, 2);
-        listActuelle.addAll(listAvendre);
-
-        model.addAttribute("articlesLst", listActuelle);
-        List<ArticleVendu> listArchive = articleVenduService.getLstArticleVendusbyUtilisateurAndEtatvente(utilisateur, 3);
-        model.addAttribute("archiveLst", listArchive);
-
-        /** Method used to know how many articles the user has got on each lists
-         *
-         */
-
-        int articleListSize = listActuelle.size();
+        int articleListSize = list.size();
         model.addAttribute("nmbArticles", articleListSize);
-
-        int archiveListSize = listArchive.size();
-        model.addAttribute("nmbArchives", archiveListSize);
 
         return "view_articles_list";
 
