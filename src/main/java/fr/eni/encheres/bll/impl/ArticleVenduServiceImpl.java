@@ -13,6 +13,7 @@ import java.util.List;
 @Service
 public class ArticleVenduServiceImpl implements ArticleVenduService {
 
+
     private ArticleVenduDAO articleVenduDAO;
 
     private UtilisateurDAO utilisateurDAO;
@@ -82,6 +83,17 @@ public class ArticleVenduServiceImpl implements ArticleVenduService {
         return articleVendu;
     }
 
+    /**
+     * method to get the list of article by categorie id
+     * @param noCategorie
+     * @return
+     */
+    @Override
+    public List<ArticleVendu> getLstArticleVendusByCategorie(long noCategorie) {
+        return articleVenduDAO.getListArticlesVenduByCategorie(noCategorie);
+    }
+
+
     /** Private method to make the association between an article and their other settings
      * (Utilisateur, Enchere, Categorie, Retrait)
      *
@@ -147,5 +159,8 @@ public class ArticleVenduServiceImpl implements ArticleVenduService {
         return articleVenduDAO.findNomArticle(noArticle);
     }
 
-
+    @Override
+    public Integer getCalendrierEnchere(LocalDate dateDebutEnchere, LocalDate dateFinEnchere) {
+        return 0;
+    }
 }

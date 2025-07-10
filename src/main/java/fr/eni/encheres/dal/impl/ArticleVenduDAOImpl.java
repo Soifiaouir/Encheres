@@ -22,26 +22,43 @@ import java.util.List;
 @Repository
 public class ArticleVenduDAOImpl implements ArticleVenduDAO {
 
-     private final String FIND_BY_NUMBER = "SELECT no_article, nom_article, description, date_debut_encheres, " +
-             "date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie FROM articles_vendus " +
-             "WHERE no_article = :noArticle";
+
+     private final String FIND_BY_NUMBER = "SELECT A.no_article, A.nom_article, A.description, A.date_debut_encheres, " +
+             "A.date_fin_encheres, A.prix_initial, A.prix_vente, A.no_categorie, A.etat_vente, " +
+             "U.no_utilisateur, U.nom, U.prenom, U.pseudo, " +
+             "C.no_categorie, C.libelle " +
+             "FROM ARTICLES_VENDUS A " +
+             "LEFT JOIN UTILISATEURS U ON U.no_utilisateur = A.no_utilisateur " +
+             "LEFT JOIN CATEGORIES C ON C.no_categorie = A.no_categorie " +
+             "WHERE A.no_article = :noArticle";
 
      private final String FIND_ALL = "SELECT no_article, nom_article, description, date_debut_encheres, " +
              "date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie FROM articles_vendus ";
 
-     private final String FIND_BY_UTILISATEUR = "SELECT no_article, nom_article, description, date_debut_encheres, " +
-             "date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie FROM articles_vendus where no_utilisateur = :noUtilisateur";
+     private final String FIND_BY_UTILISATEUR = "SELECT no_article, nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, etat_vente,nom, prenom, pseudo, libelle " +
+             "FROM articles_vendus JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur " +
+             "JOIN CATEGORIES on categories.no_categorie = articles_vendus.no_categorie " +
+             "where ARTICLES_VENDUS.no_utilisateur = :noUtilisateur";
 
      private final String INSERT = "INSERT INTO articles_vendus(nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie) " +
              "VALUES (:nomArticle, :description, :dateDebutEncheres, :dateFinEncheres, :prixInitial, :prixVente, :noUtilisateur, :noCategorie)";
 
      private final String UPDATE = "UPDATE articles_vendus SET nom_article = :nomArticle, description = :description, date_debut_encheres = :dateDebutEncheres, " +
-             "date_fin_encheres = :dateFinEncheres, prix_initial = :prixInitial, prix_vente = :prixVente, no_utilisateur = :noUtilisateur, no_categorie = :noCategorie "  +
+             "date_fin_encheres = :dateFinEncheres, prix_initial = :prixInitial, prix_vente = :prixVente, no_utilisateur = :noUtilisateur, no_categorie = :noCategorie " +
              "WHERE no_article = :noArticle";
 
      private final String FIND_NOM = "SELECT nom FROM articles_vendus WHERE no_article = :noArticle";
 
      private final String FIND_PRIX_VENTE = "SELECT prix_vente FROM articles_vendus WHERE no_article = :noArticle";
+
+     private final String FIND_CATEGORIE = "SELECT a.no_article, a.description, a.nom_article, a.date_debut_encheres, " +
+             " a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, a.etat_vente , " +
+             " u.no_utilisateur, u.nom, u.prenom, u.pseudo, c.no_categorie, c.libelle" +
+             "    FROM dbo.ARTICLES_VENDUS a" +
+             "    LEFT JOIN UTILISATEURS u ON u.no_utilisateur = a.no_utilisateur" +
+             "    LEFT JOIN CATEGORIES c ON c.no_categorie = a.no_categorie" +
+             "    WHERE a.no_categorie = :noCategorie";
+     ;
 
 
      @Autowired
@@ -54,7 +71,8 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
           this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
      }
 
-     /** Method to get an article
+     /**
+      * Method to get an article
       *
       * @param noArticle
       * @return ArticleVendu
@@ -64,17 +82,17 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
      public ArticleVendu getArticleVendu(long noArticle) {
           MapSqlParameterSource params = new MapSqlParameterSource();
           params.addValue("noArticle", noArticle);
-          return jdbcTemplate.queryForObject(FIND_BY_NUMBER, params,
-                  new BeanPropertyRowMapper<>(ArticleVendu.class));
+          return jdbcTemplate.queryForObject(FIND_BY_NUMBER, params, new ArticleMapper());
      }
 
-     /** Method to create a new article
+     /**
+      * Method to create a new article
       *
       * @param articleVendu
       */
 
      @Override
-     public void createArticle (ArticleVendu articleVendu) {
+     public void createArticle(ArticleVendu articleVendu) {
           KeyHolder keyHolder = new GeneratedKeyHolder();
 
           MapSqlParameterSource namedParameters = new MapSqlParameterSource();
@@ -89,13 +107,14 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
 
           jdbcTemplate.update(INSERT, namedParameters, keyHolder);
 
-		  if (keyHolder != null && keyHolder.getKey() != null) {
+          if (keyHolder != null && keyHolder.getKey() != null) {
                articleVendu.setNoArticle(keyHolder.getKey().longValue());
           }
 
      }
 
-     /** Method used to update an article
+     /**
+      * Method used to update an article
       *
       * @param articleVendu
       */
@@ -118,13 +137,14 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
 
      }
 
-     /** Method used to remove an article
+     /**
+      * Method used to remove an article
       *
       * @param noArticle
       */
 
      @Override
-     public void removeArticle (long noArticle) {
+     public void removeArticle(long noArticle) {
           String sql = "DELETE FROM article_vendu WHERE no_article = noArticle";
           MapSqlParameterSource params = new MapSqlParameterSource();
           params.addValue("noArticle", noArticle);
@@ -132,17 +152,19 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
           namedParameterJdbcTemplate.update(sql, params);
      }
 
-     /** Method used to get a list of all the articles
+     /**
+      * Method used to get a list of all the articles
       *
       * @return a list of articles
       */
 
      @Override
-     public List<ArticleVendu> getAllArticleVendu(){
+     public List<ArticleVendu> getAllArticleVendu() {
           return jdbcTemplate.query(FIND_ALL, new BeanPropertyRowMapper<>(ArticleVendu.class));
      }
 
-     /** Method used to get a list of articles sells by someone
+     /**
+      * Method used to get a list of articles sells by someone
       *
       * @return
       */
@@ -153,36 +175,76 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
           MapSqlParameterSource params = new MapSqlParameterSource();
           params.addValue("noUtilisateur", noUtilisateur);
 
-          return jdbcTemplate.query(FIND_BY_UTILISATEUR, params, new BeanPropertyRowMapper<>(ArticleVendu.class));
+          return jdbcTemplate.query(FIND_BY_UTILISATEUR, params, new ArticleMapper());
      }
 
-     /** Method used to get the name of an article
+     /**
+      * Method used to get the name of an article
       *
       * @param noArticle
       * @return a string with the name of the article
       */
 
      @Override
-     public String findNomArticle (long noArticle){
+     public String findNomArticle(long noArticle) {
           MapSqlParameterSource params = new MapSqlParameterSource();
           params.addValue("noArticle", noArticle);
 
           return jdbcTemplate.queryForObject(FIND_NOM, params, String.class);
      }
 
-     /** Method used to get the actual price of an article
+     /**
+      * Method used to get the actual price of an article
       *
       * @param noArticle
       * @return the number of "prix_vente"
       */
 
      @Override
-     public int findPrixEnchere (long noArticle){
+     public int findPrixEnchere(long noArticle) {
           MapSqlParameterSource params = new MapSqlParameterSource();
           params.addValue("noArticle", noArticle);
 
           return jdbcTemplate.queryForObject(FIND_PRIX_VENTE, params, Integer.class);
      }
 
+     @Override
+     public List<ArticleVendu> getListArticlesVenduByCategorie(long noCategorie) {
+          MapSqlParameterSource params = new MapSqlParameterSource();
+          params.addValue("noCategorie", noCategorie);
+          return jdbcTemplate.query(FIND_CATEGORIE, params, new ArticleMapper());
+     }
 
+     class ArticleMapper implements RowMapper<ArticleVendu> {
+          @Override
+          public ArticleVendu mapRow(ResultSet rs, int rowNum) throws SQLException {
+               ArticleVendu a = new ArticleVendu();
+               a.setNoArticle(rs.getLong("no_article"));
+               a.setNomArticle(rs.getString("nom_article"));
+               a.setDescription(rs.getString("description"));
+               a.setDateDebutEncheres(rs.getDate("date_debut_encheres").toLocalDate());
+               a.setDateFinEncheres(rs.getDate("date_fin_encheres").toLocalDate());
+               a.setPrixVente(rs.getInt("prix_vente"));
+               a.setEtatVente(rs.getString("Etat_vente"));
+
+               Utilisateur utilisateur = new Utilisateur();
+               utilisateur.setNoUtilisateur(rs.getLong("NO_UTILISATEUR"));
+               utilisateur.setNom(rs.getString("NOM"));
+               utilisateur.setPrenom(rs.getString("PRENOM"));
+               utilisateur.setPseudo(rs.getString("PSEUDO"));
+               a.setUtilisateur(utilisateur);
+
+               Categorie categorie = new Categorie();
+               categorie.setNoCategorie(rs.getLong("no_categorie"));
+               categorie.setLibelle(rs.getString("libelle"));
+               a.setCategorie(categorie);
+//               Enchere enchere = new  Enchere();
+//               enchere.setNoEnchere(rs.getLong("NO_ENCHERE"));
+//               enchere.setDateEnchere(rs.getDate("date_encheres").toLocalDate());
+//               enchere.setMontantEnchere(rs.getInt("montant_encheres"));
+//               a.setLstEncheres(enchere);
+
+               return a;
+          }
+     }
 }

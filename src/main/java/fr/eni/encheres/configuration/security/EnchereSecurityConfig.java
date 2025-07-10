@@ -54,6 +54,7 @@ public class EnchereSecurityConfig {
                     .requestMatchers("/css/*").permitAll()
                     .requestMatchers("/font/*").permitAll()
                     .requestMatchers("/img/*").permitAll()
+                    .requestMatchers("/js/*").permitAll()
                     .requestMatchers("/.well-known/**").permitAll()  // Permet l'accès à /well-known
                     .anyRequest().permitAll();
         });

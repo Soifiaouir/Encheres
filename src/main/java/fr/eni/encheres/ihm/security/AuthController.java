@@ -1,6 +1,10 @@
 package fr.eni.encheres.ihm.security;
 
+import fr.eni.encheres.bll.CategorieService;
+import fr.eni.encheres.bll.EnchereService;
 import fr.eni.encheres.bll.UtilisateurService;
+import fr.eni.encheres.bo.Categorie;
+import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.dto.UtilisateurDTO;
 import fr.eni.encheres.exception.BusinessException;
@@ -17,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @SessionAttributes({"userSession"})
@@ -24,11 +29,23 @@ public class AuthController {
 
     private final UtilisateurService service;
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
+    private final EnchereService eService;
+    private final CategorieService cService;
 
-    public AuthController(UtilisateurService service) {
+    public AuthController(UtilisateurService service, EnchereService eService, CategorieService cService) {
         this.service = service;
+        this.eService = eService;
+        this.cService = cService;
     }
 
+    @GetMapping({"/", "accueil"})
+    public String index(@ModelAttribute("userSession") Utilisateur userSession, Model model) {
+        List<Enchere> encheres = eService.findListEnchere();
+        List<Categorie> categories = cService.findAll();
+        model.addAttribute("listCategories",categories);
+        model.addAttribute("encherelst", encheres);
+        return "index";
+    }
 
     @ModelAttribute("userSession")
     public Utilisateur userSession() {
@@ -44,6 +61,7 @@ public class AuthController {
     public String newSession(@ModelAttribute("userSession") Utilisateur userSession,
                              Principal principal) {
         String pseudo = principal.getName();
+        System.out.println("pseudo: " + pseudo);
 
         Utilisateur userTemp = service.findUtilisateurByPseudo(pseudo);
         if (userTemp != null) {
