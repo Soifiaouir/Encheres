@@ -54,7 +54,6 @@
                     <option data-th-each="item : ${categorieList}"
                             data-th-text="${item.libelle}"
                             data-th-value="${item.noCategorie}"></option>
-                    <div data-th-replace="~{fragments/error/fragment-error :: frag-error('Categorie')}"></div>
                 </select>
             </div>
                 <label class="font-medium text-sm text-neutral-600 bg-neutral-300 px-2"
@@ -85,6 +84,20 @@
         <div data-th-replace="~{fragments/error/fragment-error :: frag-error('dateFinEncheres')}"></div>
                 <br /><br />
 
+            </li>
+            <ul>Retrait (A FAIRE)
+           <!--   <li>
+                    <label for="idRetraitRue"> Rue : </label>
+                    <input id="idRetraitRue" type="text" data-th-value="*{lieuRetrait.rue}" readonly/></li>
+                <li>
+                    <label for="idRetraitCP"> Code Postal : </label>
+                    <input id="idRetraitCP" type="text" data-th-value="*{lieuRetrait.codePostal}" readonly/>
+                </li>
+                <li>
+                    <label for="idRetraitVille"> Ville : </label>
+                    <input id="idRetraitVille" type="text" data-th-value="*{lieuRetrait.ville}" readonly/>
+                </li> -->
+            </ul>
 
             <h2 class="text-neutral-900 ms-5 font-bold hover:scale-110 p-2 pb-1.5" >Retrait </h2>
 

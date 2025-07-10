@@ -10,39 +10,21 @@
 <main class="bg-neutral-300 rounded-b-lg min-h-[93vh] grid grid-cols-12">
     <section class="my-auto px-5 lg:col-start-4 lg:col-end-10 col-span-12">
         <div class="text-center mb-5 pb-5 relative" th:switch="${status}">
-            <h3 class="font-black">Erreur</h3>
-            <div th:case="400" class="relative">
-                <h1 th:text="400"
+            <h3 th:text="#{error.template.h3}"
+                class="font-black"></h3>
+            <div th:case="*" class="relative">
+                <h1 th:text="${status}"
                     class="text-9xl  font-black"></h1>
                 <span class="absolute top-0 start-0 w-full text-center text-lime-200 translate-2 text-9xl font-black"
-                      th:text="400"></span>
-                <p class="text-sm font-bold">Mauvaise requête <br> La requête est mal formulée ou contient des données invalides.</p>
-            </div>
-            <div th:case="403" class="relative">
-                <h1 th:text="403"
-                    class="text-9xl  font-black"></h1>
-                <span class="absolute top-0 start-0 w-full text-center text-lime-200 translate-2 text-9xl font-black"
-                      th:text="403"></span>
-                <p class="text-sm font-bold">Accès refusé <br> Vous n'etes pas autorisé à accèder à ce contenu</p>
-            </div>
-            <div th:case="404" class="relative">
-                <h1 th:text="404"
-                    class="text-9xl  font-black"></h1>
-                <span class="absolute top-0 start-0 w-full text-center text-lime-200 translate-2 text-9xl font-black"
-                      th:text="404"></span>
-                <p class="text-sm font-bold">Page introuvable <br> Ce contenu n'est plus disponible sur ce site</p>
-            </div>
-            <div th:case="500" class="relative">
-                <h1 th:text="500"
-                    class="text-9xl  font-black"></h1>
-                <span class="absolute top-0 start-0 w-full text-center text-lime-200 translate-2 text-9xl font-black"
-                      th:text="500"></span>
-                <p class="text-sm font-bold">Erreur serveur <br> Veuillez reessayer plus tard</p>
-            </div>
-            <a href="/" class="mx-auto mt-4 block w-fit text-sm">
-                <div class="transition duration-400 px-5 w-fit btn bg-neutral-900 hover:bg-neutral-700 hover:scale-110 text-neutral-300 lg:px-5 p-2 pb-1.5 font-bold rounded-sm flex items-center gap-1">
-                     Accueil
-                </div>
+                      th:text="${status}"></span>
+                <h6 th:text="#{${'error.' + status + '.title'}}"
+                    class="text-sm font-bold"></h6>
+                <p th:text="#{${'error.' + status + '.content'}}"
+                   class="text-sm font-bold"></p></div>
+            <a href="/"
+               class="mx-auto mt-4 block w-fit text-sm">
+                <div th:text="#{error.template.home}"
+                     class="transition duration-400 px-5 w-fit btn bg-neutral-900 hover:bg-neutral-700 hover:scale-110 text-neutral-300 lg:px-5 p-2 pb-1.5 font-bold rounded-sm flex items-center gap-1"></div>
             </a>
         </div>
     </section>

@@ -206,4 +206,12 @@ public class ArticleVendu {
         sb.append('}');
         return sb.toString();
     }
+
+    public Enchere getDerniereEnchere(){
+        if (lstEncheres == null || lstEncheres.isEmpty()) {
+            return null;
+        }
+        return lstEncheres.get(lstEncheres.size()-1);
+    }
+
 }

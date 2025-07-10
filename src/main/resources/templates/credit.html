@@ -24,94 +24,110 @@
                 <p th:text="'⚠️ ' + #{credit.view.warn}" class="font-medium mb-10 text-sm mt-5 lg:mt-0"></p>
             </div>
             <div class="p-5 ps-8 lg:ps-5 grid lg:grid-cols-4 auto-cols-[12rem] lg:grid-flow-row grid-flow-col overflow-x-auto lg:overflow-visible gap-5 mb-10">
-                <div class="neutral-shadow aspect-square col bg-lime-200 rounded-lg hover:scale-110 hover:bg-yellow-200  transition flex flex-col items-center justify-center">
-                    <p th:text="#{credit.price.100} + ' €'"
-                       class="text-neutral-900 mt-2 font-black text-xl"></p>
-                    <div class="text-center">
-                       <span th:text="#{view.credit.100}"
-                             class="font-black text-neutral-900 text-5xl me-2 lg:pt-1 pt-1"></span>
-                        <img src="/img/money-neutral-lg.png"
-                             class="w-[30px] mx-auto"
-                             alt="credit">
+                <a th:href="@{/credit/buy(credit=100)}">
+                    <div class="neutral-shadow aspect-square col bg-lime-200 rounded-lg hover:scale-110 hover:bg-yellow-200  transition flex flex-col items-center justify-center">
+                        <p th:text="#{credit.price.100} + ' €'"
+                           class="text-neutral-900 mt-2 font-black text-xl"></p>
+                        <div class="text-center">
+                           <span th:text="#{view.credit.100}"
+                                 class="font-black text-neutral-900 text-5xl me-2 lg:pt-1 pt-1"></span>
+                            <img src="/img/money-neutral-lg.png"
+                                 class="w-[30px] mx-auto"
+                                 alt="credit">
+                        </div>
                     </div>
-                </div>
-                <div class="neutral-shadow aspect-square col bg-lime-200 rounded-lg hover:scale-110 hover:bg-yellow-200  transition flex flex-col items-center justify-center">
-                    <p th:text="#{credit.price.250} + ' €'"
-                       class="text-neutral-900 mt-2 font-black text-xl"></p>
-                    <div class="text-center">
-                       <span th:text="#{view.credit.250}"
-                             class="font-black text-neutral-900 text-5xl me-2 lg:pt-1 pt-1"></span>
-                        <img src="/img/money-neutral-lg.png"
-                             class="w-[30px] mx-auto"
-                             alt="credit">
+                </a>
+                <a th:href="@{/credit/buy(credit=250)}">
+                    <div class="neutral-shadow aspect-square col bg-lime-200 rounded-lg hover:scale-110 hover:bg-yellow-200  transition flex flex-col items-center justify-center">
+                        <p th:text="#{credit.price.250} + ' €'"
+                           class="text-neutral-900 mt-2 font-black text-xl"></p>
+                        <div class="text-center">
+                           <span th:text="#{view.credit.250}"
+                                 class="font-black text-neutral-900 text-5xl me-2 lg:pt-1 pt-1"></span>
+                            <img src="/img/money-neutral-lg.png"
+                                 class="w-[30px] mx-auto"
+                                 alt="credit">
+                        </div>
                     </div>
-                </div>
-                <div class="neutral-shadow aspect-square col bg-lime-200 rounded-lg hover:scale-110 hover:bg-yellow-200 transition flex flex-col items-center justify-center">
-                    <p th:text="#{credit.price.500} + ' €'"
-                       class="text-neutral-900 mt-2 font-black text-xl"></p>
-                    <div class="text-center">
-                       <span th:text="#{view.credit.500}"
-                             class="font-black text-neutral-900 text-5xl me-2 lg:pt-1 pt-1"></span>
-                        <img src="/img/money-neutral-lg.png"
-                             class="w-[30px] mx-auto"
-                             alt="credit">
+                </a>
+                <a th:href="@{/credit/buy(credit=500)}">
+                    <div class="neutral-shadow aspect-square col bg-lime-200 rounded-lg hover:scale-110 hover:bg-yellow-200 transition flex flex-col items-center justify-center">
+                        <p th:text="#{credit.price.500} + ' €'"
+                           class="text-neutral-900 mt-2 font-black text-xl"></p>
+                        <div class="text-center">
+                           <span th:text="#{view.credit.500}"
+                                 class="font-black text-neutral-900 text-5xl me-2 lg:pt-1 pt-1"></span>
+                            <img src="/img/money-neutral-lg.png"
+                                 class="w-[30px] mx-auto"
+                                 alt="credit">
+                        </div>
                     </div>
-                </div>
-                <div class="neutral-shadow aspect-square col bg-lime-200 rounded-lg hover:scale-110 hover:bg-yellow-200 transition flex flex-col items-center justify-center">
-                    <p th:text="#{credit.price.1000} + ' €'"
-                       class="text-neutral-900 mt-2 font-black text-xl"></p>
-                    <div class="text-center">
-                       <span th:text="#{view.credit.1000}"
-                             class="font-black text-neutral-900 text-5xl me-2 lg:pt-1 pt-1"></span>
-                        <img src="/img/money-neutral-lg.png"
-                             class="w-[30px] mx-auto"
-                             alt="credit">
+                </a>
+                <a th:href="@{/credit/buy(credit=1000)}">
+                    <div class="neutral-shadow aspect-square col bg-lime-200 rounded-lg hover:scale-110 hover:bg-yellow-200 transition flex flex-col items-center justify-center">
+                        <p th:text="#{credit.price.1000} + ' €'"
+                           class="text-neutral-900 mt-2 font-black text-xl"></p>
+                        <div class="text-center">
+                           <span th:text="#{view.credit.1000}"
+                                 class="font-black text-neutral-900 text-5xl me-2 lg:pt-1 pt-1"></span>
+                            <img src="/img/money-neutral-lg.png"
+                                 class="w-[30px] mx-auto"
+                                 alt="credit">
+                        </div>
                     </div>
-                </div>
-                <div class="neutral-shadow aspect-square col bg-lime-200 rounded-lg hover:scale-110 hover:bg-yellow-200 transition flex flex-col items-center justify-center">
-                    <p th:text="#{credit.price.2000} + ' €'"
-                       class="text-neutral-900 mt-2 font-black text-xl"></p>
-                    <div class="text-center">
-                       <span th:text="#{view.credit.2000}"
-                             class="font-black text-neutral-900 text-5xl me-2 lg:pt-1 pt-1"></span>
-                        <img src="/img/money-neutral-lg.png"
-                             class="w-[30px] mx-auto"
-                             alt="credit">
+                </a>
+                <a th:href="@{/credit/buy(credit=2000)}">
+                    <div class="neutral-shadow aspect-square col bg-lime-200 rounded-lg hover:scale-110 hover:bg-yellow-200 transition flex flex-col items-center justify-center">
+                        <p th:text="#{credit.price.2000} + ' €'"
+                           class="text-neutral-900 mt-2 font-black text-xl"></p>
+                        <div class="text-center">
+                           <span th:text="#{view.credit.2000}"
+                                 class="font-black text-neutral-900 text-5xl me-2 lg:pt-1 pt-1"></span>
+                            <img src="/img/money-neutral-lg.png"
+                                 class="w-[30px] mx-auto"
+                                 alt="credit">
+                        </div>
                     </div>
-                </div>
-                <div class="neutral-shadow aspect-square col bg-lime-200 rounded-lg hover:scale-110 hover:bg-yellow-200 transition flex flex-col items-center justify-center">
-                    <p th:text="#{credit.price.3000} + ' €'"
-                       class="text-neutral-900 mt-2 font-black text-xl"></p>
-                    <div class="text-center">
+                </a>
+                <a th:href="@{/credit/buy(credit=3000)}">
+                    <div class="neutral-shadow aspect-square col bg-lime-200 rounded-lg hover:scale-110 hover:bg-yellow-200 transition flex flex-col items-center justify-center">
+                        <p th:text="#{credit.price.3000} + ' €'"
+                           class="text-neutral-900 mt-2 font-black text-xl"></p>
+                        <div class="text-center">
                        <span th:text="#{view.credit.3000}"
                              class="font-black text-neutral-900 text-5xl me-2 lg:pt-1 pt-1"></span>
-                        <img src="/img/money-neutral-lg.png"
-                             class="w-[30px] mx-auto"
-                             alt="credit">
+                            <img src="/img/money-neutral-lg.png"
+                                 class="w-[30px] mx-auto"
+                                 alt="credit">
+                        </div>
                     </div>
-                </div>
-                <div class="neutral-shadow aspect-square col bg-lime-200 rounded-lg hover:scale-110 hover:bg-yellow-200 transition flex flex-col items-center justify-center">
-                    <p th:text="#{credit.price.4000} + ' €'"
-                       class="text-neutral-900 mt-2 font-black text-xl"></p>
-                    <div class="text-center">
+                </a>
+                <a th:href="@{/credit/buy(credit=4000)}">
+                    <div class="neutral-shadow aspect-square col bg-lime-200 rounded-lg hover:scale-110 hover:bg-yellow-200 transition flex flex-col items-center justify-center">
+                        <p th:text="#{credit.price.4000} + ' €'"
+                           class="text-neutral-900 mt-2 font-black text-xl"></p>
+                        <div class="text-center">
                        <span th:text="#{view.credit.4000}"
                              class="font-black text-neutral-900 text-5xl me-2 lg:pt-1 pt-1"></span>
-                        <img src="/img/money-neutral-lg.png"
-                             class="w-[30px] mx-auto"
-                             alt="credit">
+                            <img src="/img/money-neutral-lg.png"
+                                 class="w-[30px] mx-auto"
+                                 alt="credit">
+                        </div>
                     </div>
-                </div>
-                <div class="neutral-shadow aspect-square col bg-lime-200 rounded-lg hover:scale-110 hover:bg-yellow-200 transition flex flex-col items-center justify-center">
-                    <p th:text="#{credit.price.5000} + ' €'"
-                       class="text-neutral-900 mt-2 font-black text-xl"></p>
-                    <div class="text-center">
+                </a>
+                <a th:href="@{/credit/buy(credit=5000)}">
+                    <div class="neutral-shadow aspect-square col bg-lime-200 rounded-lg hover:scale-110 hover:bg-yellow-200 transition flex flex-col items-center justify-center">
+                        <p th:text="#{credit.price.5000} + ' €'"
+                           class="text-neutral-900 mt-2 font-black text-xl"></p>
+                        <div class="text-center">
                        <span th:text="#{view.credit.5000}"
                              class="font-black text-neutral-900 text-5xl me-2 lg:pt-1 pt-1"></span>
-                        <img src="/img/money-neutral-lg.png"
-                             class="w-[30px] mx-auto"
-                             alt="credit">
+                            <img src="/img/money-neutral-lg.png"
+                                 class="w-[30px] mx-auto"
+                                 alt="credit">
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </section>

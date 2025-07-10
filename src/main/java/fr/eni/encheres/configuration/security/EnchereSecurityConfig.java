@@ -15,8 +15,13 @@ import javax.sql.DataSource;
 @Configuration
 public class EnchereSecurityConfig {
 
+    private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
+
+    public EnchereSecurityConfig(CustomAuthenticationFailureHandler customAuthenticationFailureHandler) {
+        this.customAuthenticationFailureHandler = customAuthenticationFailureHandler;
+    }
     private static final String SELECT_USER = """
-            SELECT pseudo, mot_de_passe, 1 FROM UTILISATEURS WHERE pseudo = ?
+            SELECT pseudo, mot_de_passe, active FROM UTILISATEURS WHERE pseudo = ?
             """;
     private static final String SELECT_ROLES = """
             SELECT u.pseudo, r.role FROM UTILISATEURS u
@@ -50,12 +55,14 @@ public class EnchereSecurityConfig {
                     .requestMatchers("/css/*").permitAll()
                     .requestMatchers("/font/*").permitAll()
                     .requestMatchers("/img/*").permitAll()
+                    .requestMatchers("/js/*").permitAll()
                     .requestMatchers("/.well-known/**").permitAll()  // Permet l'accès à /well-known
                     .anyRequest().permitAll();
         });
 
         http.formLogin(form -> {
             form.loginPage("/login").permitAll();
+            form.failureHandler(customAuthenticationFailureHandler);
             form.usernameParameter("pseudo");
             form.passwordParameter("motDePasse");
             form.defaultSuccessUrl("/session").permitAll();

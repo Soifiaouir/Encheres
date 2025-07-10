@@ -1,6 +1,7 @@
 package fr.eni.encheres.bll;
 
 import fr.eni.encheres.bo.ArticleVendu;
+import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Utilisateur;
 
 import java.time.LocalDate;
@@ -27,4 +28,8 @@ public interface ArticleVenduService {
     String getNameArticleVendu(long noArticle);
 
     Long getCalendrierEnchere(LocalDate dateDebutEnchere, LocalDate dateFinEnchere);
+    List<ArticleVendu> getLstArticleVendusByCategorie(long Categorie);
+
+
+
 }

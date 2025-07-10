@@ -10,7 +10,7 @@ public interface EnchereService {
     List<Enchere> findByArticle(long noArticle);
     List<Enchere> findByUser(long noUtilisateur);
     List<Enchere> findListEnchere();
-    void createEnchere(Enchere enchere);
+    void createEnchere(Enchere enchere, Long  noArticle);
     void updateEnchere(Enchere enchere);
     void deleteEnchere(long noEnchere);
 

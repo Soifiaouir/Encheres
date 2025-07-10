@@ -25,4 +25,6 @@ public interface ArticleVenduDAO {
 
     List<ArticleVendu> getListArticlesVenduByUtilisateurAndEtatvente(Utilisateur utilisateur, Integer etatvente);
 
+
+    List<ArticleVendu> getListArticlesVenduByCategorie(long noCategorie);
 }
