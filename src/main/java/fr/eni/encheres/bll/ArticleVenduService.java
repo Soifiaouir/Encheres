@@ -28,6 +28,7 @@ public interface ArticleVenduService {
     String getNameArticleVendu(long noArticle);
 
     Long getCalendrierEnchere(LocalDate dateDebutEnchere, LocalDate dateFinEnchere);
+
     List<ArticleVendu> getLstArticleVendusByCategorie(long Categorie);
 
 

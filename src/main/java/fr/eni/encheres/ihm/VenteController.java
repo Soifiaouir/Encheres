@@ -64,6 +64,9 @@ public class VenteController {
 
         model.addAttribute("articlesLst", listEnCours);
 
+        int enCoursListSize = listEnCours.size();
+        model.addAttribute("nmbArticles", enCoursListSize);
+
         /** Method used to know how many articles the user has got on each lists
          *
          */
@@ -77,6 +80,9 @@ public class VenteController {
         List<ArticleVendu> listVendus = articleVenduService.getLstArticleVendusbyUtilisateurAndEtatvente(utilisateur, 3);
 
         model.addAttribute("articlesLst", listVendus);
+
+        int archiveListSize = listVendus.size();
+        model.addAttribute("nmbArchives", archiveListSize);
 
         /** Method used to know how many articles the user has got on each lists
          *

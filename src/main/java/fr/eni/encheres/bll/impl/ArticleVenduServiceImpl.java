@@ -39,13 +39,6 @@ public class ArticleVenduServiceImpl implements ArticleVenduService {
     @Override
     public List<ArticleVendu> getLstArticleVendus() {
         List<ArticleVendu> lstArticlesVendus = articleVenduDAO.getAllArticleVendu();
-
-        if (lstArticlesVendus != null) {
-            lstArticlesVendus.forEach(articleVendu -> {
-                setUtilisateurCategorieRetrait1article(articleVendu);
-            });
-        }
-
         return lstArticlesVendus;
     }
 
@@ -84,16 +77,6 @@ public class ArticleVenduServiceImpl implements ArticleVenduService {
     public ArticleVendu getArticleVenduByNoArticle(long noArticle) {
         ArticleVendu articleVendu = articleVenduDAO.getArticleVendu(noArticle);
 
-          if (articleVendu != null) {
-           setUtilisateurCategorieRetrait1article(articleVendu);
-
-            //List<Enchere> lstEncheres = enchereDAO.readByArticle(noArticle);
-            //if (lstEncheres != null) {
-            //   articleVendu.setLstEncheres(lstEncheres);
-            //}
-
-        }
-
         return articleVendu;
     }
 
@@ -107,23 +90,6 @@ public class ArticleVenduServiceImpl implements ArticleVenduService {
         return articleVenduDAO.getListArticlesVenduByCategorie(noCategorie);
     }
 
-
-    /** Private method to make the association between an article and their other settings
-     * (Utilisateur, Enchere, Categorie, Retrait)
-     *
-     * @param articleVendu
-     */
-
-   private void setUtilisateurCategorieRetrait1article(ArticleVendu articleVendu) {
-        //Utilisateur utilisateur = utilisateurDAO.readUtilisateurById(articleVendu.getUtilisateur().getNoUtilisateur());
-        //articleVendu.setUtilisateur(utilisateur);
-       // Enchere enchere = enchereDAO.readByNoEnchere(articleVendu
-        //Categorie categorie = categorieDAO.readCategorie(articleVendu.getCategorie().getNoCategorie());
-        //articleVendu.setCategorie(categorie);
-        //Retrait retrait = retraitDAO.readByArticle(articleVendu.getNoArticle());
-        //articleVendu.setLieuRetrait(retrait);
-
-    }
 
     /** Method used to know what is the state of the auction (begun, ended, not already began)
      *
@@ -148,7 +114,7 @@ public class ArticleVenduServiceImpl implements ArticleVenduService {
         return 0;
     }
 
-    /** Method used to create a new article
+    /** Method used to create an article
      *
      * @param articleVendu
      */
@@ -156,15 +122,8 @@ public class ArticleVenduServiceImpl implements ArticleVenduService {
     @Override
     public void createArticleVendu(ArticleVendu articleVendu) {
 
-        BusinessException be = new BusinessException();
-
         articleVenduDAO.createArticle(articleVendu);
     }
-
-    /** Method used to update an Article
-     *
-     * @param articleVendu
-     */
 
     @Override
     public void updateArticleVendu(ArticleVendu articleVendu) {

@@ -99,7 +99,6 @@ public class ArticleVendu {
         return this.dateDebutEncheres.format(formatter);
     }
 
-
     public String getDateFinEncheresFormatee() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return this.dateFinEncheres.format(formatter);
