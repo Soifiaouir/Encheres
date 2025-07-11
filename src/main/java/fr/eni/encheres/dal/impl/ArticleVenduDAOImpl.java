@@ -81,7 +81,8 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
      @Autowired
      private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-     public ArticleVenduDAOImpl(NamedParameterJdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+     public ArticleVenduDAOImpl(NamedParameterJdbcTemplate jdbcTemplate,
+                                NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
           this.jdbcTemplate = jdbcTemplate;
           this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
      }

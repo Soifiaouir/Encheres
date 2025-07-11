@@ -51,9 +51,6 @@ public class VenteController {
 
         model.addAttribute("articlesLst", listAvendre);
 
-        /** Method used to know how many articles the user has got on each lists
-         *
-         */
         return "view_articles_onstay_list";
     }
 
@@ -67,9 +64,6 @@ public class VenteController {
         int enCoursListSize = listEnCours.size();
         model.addAttribute("nmbArticles", enCoursListSize);
 
-        /** Method used to know how many articles the user has got on each lists
-         *
-         */
         return "view_articles_on_sells_list";
 
     }
@@ -78,15 +72,11 @@ public class VenteController {
     public String pagesListesArticlesVendus(@ModelAttribute("userSession") Utilisateur utilisateur, Model model) {
 
         List<ArticleVendu> listVendus = articleVenduService.getLstArticleVendusbyUtilisateurAndEtatvente(utilisateur, 3);
-
         model.addAttribute("articlesLst", listVendus);
 
         int archiveListSize = listVendus.size();
         model.addAttribute("nmbArchives", archiveListSize);
 
-        /** Method used to know how many articles the user has got on each lists
-         *
-         */
         return "view_articles_archive_list";
 
     }
@@ -217,9 +207,10 @@ public class VenteController {
             System.out.println("Nouvel articleVendu = " + articleVendu);
             System.out.println(articleVendu.getCalendrierEnchere(articleVendu.getDateDebutEncheres(), articleVendu.getDateFinEncheres()));
 
+
             articleVenduService.updateArticleVendu(articleVendu);
 
-            return "redirect:/list_articles";
+            return "redirect:/accueil";
 
         } catch (BusinessException e) {
             // Ajout des erreurs sur les champs

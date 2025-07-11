@@ -60,7 +60,6 @@ public class ArticleVenduServiceImpl implements ArticleVenduService {
      * @return list
      */
 
-
     @Override
     public List<ArticleVendu> getLstArticleVendusbyUtilisateur(Utilisateur utilisateur) {
         List<ArticleVendu> lstArticlesVendus = articleVenduDAO.getListArticlesVenduByUtilisateur(utilisateur);
